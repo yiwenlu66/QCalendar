@@ -36,3 +36,7 @@ Makefile*
 # QtCtreator CMake
 CMakeLists.txt.user
 
+# Compiled result
+QCalendar.app
+QCalendar
+QCalendar.exe

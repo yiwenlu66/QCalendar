@@ -2,12 +2,22 @@
 #include "preferencedialog.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_locale(QLocale::English)
+    m_config(config)
 {
     ui->setupUi(this);
+
+    switch (config->pref()->language) {
+    case PreferenceManager::ENGLISH:
+        localeChanged(QLocale::English);
+        break;
+    case PreferenceManager::CHINESE:
+        localeChanged(QLocale::Chinese);
+        break;
+    }
+
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
 }
 
@@ -18,13 +28,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::localeChanged(const QLocale& locale)
 {
-    m_locale = locale;
     ui->calendarWidget->setLocale(locale);
 }
 
 void MainWindow::preferencesTriggered()
 {
-    PreferenceDialog dlg(m_locale);
+    PreferenceDialog dlg(m_config->pref());
     connect(&dlg, SIGNAL(changeLocale(QLocale)), this, SLOT(localeChanged(QLocale)));
+    connect(&dlg, SIGNAL(changePreferences()), m_config, SLOT(configChanged()));
     dlg.exec();
 }

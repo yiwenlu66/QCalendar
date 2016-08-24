@@ -10,8 +10,12 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += calendar.h mainwindow.h \
-    preferencedialog.h
+    preferencedialog.h \
+    preferencemanager.h \
+    configloader.h
 FORMS += mainwindow.ui \
     preferencedialog.ui
 SOURCES += calendar.cpp main.cpp mainwindow.cpp \
-    preferencedialog.cpp
+    preferencedialog.cpp \
+    preferencemanager.cpp \
+    configloader.cpp

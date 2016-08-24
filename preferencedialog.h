@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QLocale>
+#include "preferencemanager.h"
 
 namespace Ui {
 class PreferenceDialog;
@@ -13,16 +14,18 @@ class PreferenceDialog : public QDialog
     Q_OBJECT
 signals:
     void changeLocale(const QLocale& locate);
+    void changePreferences();
 
 protected slots:
     void accept();
 
 public:
-    explicit PreferenceDialog(const QLocale& currentLocale, QWidget *parent = 0);
+    explicit PreferenceDialog(PreferenceManager* pref, QWidget *parent = 0);
     ~PreferenceDialog();
 
 private:
     Ui::PreferenceDialog *ui;
+    PreferenceManager* m_pref;
 };
 
 #endif // PREFERENCEDIALOG_H

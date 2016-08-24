@@ -1,14 +1,13 @@
 #include "preferencedialog.h"
 #include "ui_preferencedialog.h"
 
-PreferenceDialog::PreferenceDialog(const QLocale& currentLocale, QWidget *parent) :
+PreferenceDialog::PreferenceDialog(PreferenceManager* pref, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::PreferenceDialog)
+    ui(new Ui::PreferenceDialog),
+    m_pref(pref)
 {
     ui->setupUi(this);
-    if (currentLocale == QLocale::Chinese) {
-        ui->comboBox->setCurrentIndex(1);
-    }
+    ui->comboBox->setCurrentIndex(pref->language);
 }
 
 PreferenceDialog::~PreferenceDialog()
@@ -22,14 +21,17 @@ void PreferenceDialog::accept()
     switch (ui->comboBox->currentIndex()) {
     case 0:
         // english
+        m_pref->language = PreferenceManager::ENGLISH;
         emit changeLocale(QLocale::English);
         break;
     case 1:
         // chinese
+        m_pref->language = PreferenceManager::CHINESE;
         emit changeLocale(QLocale::Chinese);
         break;
     default:
         break;
     }
+    emit changePreferences();
     QDialog::accept();
 }

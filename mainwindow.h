@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLocale>
+#include "configloader.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,12 +20,12 @@ private slots:
     void preferencesTriggered();
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(ConfigLoader* config, QWidget *parent = 0);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    QLocale m_locale;
+    ConfigLoader* m_config;
 };
 
 #endif // MAINWINDOW_H

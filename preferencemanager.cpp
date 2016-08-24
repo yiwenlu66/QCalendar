@@ -6,7 +6,8 @@ constexpr char PreferenceManager::KEY_LANG[];
 constexpr char PreferenceManager::KEY_STARTOFWEEK[];
 
 PreferenceManager::PreferenceManager() :
-    language(getDefaultLanguage())
+    language(getDefaultLanguage()),
+    startOfWeek(Qt::Sunday)
 {
 }
 

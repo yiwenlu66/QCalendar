@@ -8,6 +8,9 @@
 #include <QJsonValue>
 #include <QMessageBox>
 
+constexpr char ConfigLoader::KEY_PREF[];
+constexpr char ConfigLoader::FILENAME[];
+
 ConfigLoader::ConfigLoader(QObject *parent) :
     QObject(parent),
     m_pref(nullptr)
@@ -17,7 +20,7 @@ ConfigLoader::ConfigLoader(QObject *parent) :
     if (!dataDir.exists()) {
         dataDir.mkpath(dataPath);
     }
-    m_jsonFile = new QFile(dataDir.filePath("config.json"));
+    m_jsonFile = new QFile(dataDir.filePath(FILENAME));
     if (!m_jsonFile->open(QIODevice::ReadWrite)) {
         QMessageBox::critical(0, tr("Error"), tr("Cannot open config file!"));
         QApplication::quit();
@@ -25,7 +28,7 @@ ConfigLoader::ConfigLoader(QObject *parent) :
     QJsonDocument jsonDocument = QJsonDocument::fromJson(m_jsonFile->readAll());
     if (jsonDocument.isObject()) {
         QJsonObject jsonObject = jsonDocument.object();
-        QJsonValue prefValue = jsonObject.value("preferences");
+        QJsonValue prefValue = jsonObject.value(KEY_PREF);
         if (prefValue.isObject()) {
             m_pref = new PreferenceManager(prefValue.toObject());
         }
@@ -38,7 +41,7 @@ ConfigLoader::ConfigLoader(QObject *parent) :
 void ConfigLoader::configChanged()
 {
     QJsonObject jsonObject;
-    jsonObject.insert("preferences", m_pref->toJson());
+    jsonObject.insert(KEY_PREF, m_pref->toJson());
     QJsonDocument jsonDocument(jsonObject);
     if (m_jsonFile->isOpen()) {
         m_jsonFile->close();

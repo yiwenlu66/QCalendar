@@ -19,6 +19,9 @@ public slots:
     void configChanged();
 
 private:
+    static constexpr char FILENAME[] = "config.json";	// TODO: support multiple users
+    static constexpr char KEY_PREF[] = "preferences";
+
     PreferenceManager* m_pref;
     QFile* m_jsonFile;
 };

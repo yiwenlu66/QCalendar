@@ -2,6 +2,9 @@
 #include <QLocale>
 #include <QtDebug>
 
+constexpr char PreferenceManager::KEY_LANG[];
+constexpr char PreferenceManager::KEY_STARTOFWEEK[];
+
 PreferenceManager::PreferenceManager() :
     language(getDefaultLanguage())
 {
@@ -9,7 +12,7 @@ PreferenceManager::PreferenceManager() :
 
 PreferenceManager::PreferenceManager(const QJsonObject & json)
 {
-    QJsonValue langValue = json.value("language");
+    QJsonValue langValue = json.value(KEY_LANG);
     switch (langValue.toInt(-1)) {
     case ENGLISH:
         language = ENGLISH;
@@ -22,7 +25,7 @@ PreferenceManager::PreferenceManager(const QJsonObject & json)
         break;
     }
 
-    QJsonValue startOfWeekValue = json.value("startOfWeek");
+    QJsonValue startOfWeekValue = json.value(KEY_STARTOFWEEK);
     switch (startOfWeekValue.toInt(-1)) {
     case Qt::Monday:
     case Qt::Tuesday:
@@ -42,8 +45,8 @@ PreferenceManager::PreferenceManager(const QJsonObject & json)
 QJsonObject PreferenceManager::toJson()
 {
     QJsonObject result;
-    result.insert("language", QJsonValue(language));
-    result.insert("startOfWeek", QJsonValue(startOfWeek));
+    result.insert(KEY_LANG, QJsonValue(language));
+    result.insert(KEY_STARTOFWEEK, QJsonValue(startOfWeek));
     return result;
 }
 

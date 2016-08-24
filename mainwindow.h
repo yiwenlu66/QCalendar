@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QApplication>
 #include <QMainWindow>
 #include <QLocale>
 #include "configloader.h"
@@ -20,11 +21,16 @@ private slots:
     void preferencesTriggered();
 
 public:
-    explicit MainWindow(ConfigLoader* config, QWidget *parent = 0);
+    explicit MainWindow(QApplication* app, ConfigLoader* config, QWidget *parent = 0);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
+
+    QApplication* m_app;
+    QTranslator* m_appTranslator;
+    QTranslator* m_qtTranslator;
+
     ConfigLoader* m_config;
 };
 

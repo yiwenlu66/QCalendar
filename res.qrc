@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/i18n">
+        <file>QCalendar_zh_CN.qm</file>
+        <file>qt_zh_CN.qm</file>
+    </qresource>
+</RCC>

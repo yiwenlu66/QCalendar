@@ -19,3 +19,7 @@ SOURCES += calendar.cpp main.cpp mainwindow.cpp \
     preferencedialog.cpp \
     preferencemanager.cpp \
     configloader.cpp
+TRANSLATIONS += QCalendar_zh_CN.ts
+
+RESOURCES += \
+    res.qrc

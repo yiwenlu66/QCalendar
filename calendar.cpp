@@ -1,4 +1,5 @@
 #include "calendar.h"
+#include <QLocale>
 
 Calendar::Calendar(QWidget* parent)
     : QCalendarWidget(parent)

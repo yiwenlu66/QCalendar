@@ -9,6 +9,9 @@ TARGET = QCalendar
 INCLUDEPATH += .
 
 # Input
-HEADERS += calendar.h mainwindow.h
-FORMS += mainwindow.ui
-SOURCES += calendar.cpp main.cpp mainwindow.cpp
+HEADERS += calendar.h mainwindow.h \
+    preferencedialog.h
+FORMS += mainwindow.ui \
+    preferencedialog.ui
+SOURCES += calendar.cpp main.cpp mainwindow.cpp \
+    preferencedialog.cpp

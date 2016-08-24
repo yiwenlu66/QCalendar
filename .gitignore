@@ -40,3 +40,6 @@ CMakeLists.txt.user
 QCalendar.app
 QCalendar
 QCalendar.exe
+
+# YCM
+.ycm*

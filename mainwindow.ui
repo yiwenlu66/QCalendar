@@ -14,8 +14,78 @@
    <string>QCalendar</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_month">
+        <property name="text">
+         <string>&lt;h1&gt;August&lt;/h1&gt;</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_year">
+        <property name="text">
+         <string>2016</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_previousMonth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_today">
+        <property name="text">
+         <string>Today</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_nextMonth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="Calendar" name="calendarWidget"/>
@@ -60,5 +130,54 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_previousMonth</sender>
+   <signal>clicked()</signal>
+   <receiver>calendarWidget</receiver>
+   <slot>showPreviousMonth()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>577</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_today</sender>
+   <signal>clicked()</signal>
+   <receiver>calendarWidget</receiver>
+   <slot>showToday()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>663</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_nextMonth</sender>
+   <signal>clicked()</signal>
+   <receiver>calendarWidget</receiver>
+   <slot>showNextMonth()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>749</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

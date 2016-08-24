@@ -16,6 +16,7 @@ class MainWindow : public QMainWindow
 
 public slots:
     void localeChanged(const QLocale& locale);
+    void monthChanged(int year, int month);
 
 private slots:
     void preferencesTriggered();
@@ -32,6 +33,8 @@ private:
     QTranslator* m_qtTranslator;
 
     ConfigLoader* m_config;
+
+    static QString getLongMonthName(int);
 };
 
 #endif // MAINWINDOW_H

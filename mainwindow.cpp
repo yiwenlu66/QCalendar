@@ -27,6 +27,9 @@ MainWindow::MainWindow(QApplication* app, ConfigLoader* config, QWidget *parent)
 
     ui->calendarWidget->setFirstDayOfWeek(config->pref()->startOfWeek);
 
+    monthChanged(QDate::currentDate().year(), QDate::currentDate().month());
+    connect(ui->calendarWidget, SIGNAL(currentPageChanged(int,int)), this, SLOT(monthChanged(int,int)));
+
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
 }
 
@@ -48,6 +51,12 @@ void MainWindow::localeChanged(const QLocale& locale)
     ui->retranslateUi(this);
 }
 
+void MainWindow::monthChanged(int year, int month)
+{
+    ui->label_month->setText(QString("<h1>") + getLongMonthName(month) + QString("</h1>"));
+    ui->label_year->setText(QString::number(year));
+}
+
 void MainWindow::preferencesTriggered()
 {
     PreferenceDialog dlg(m_config->pref());
@@ -55,4 +64,36 @@ void MainWindow::preferencesTriggered()
     connect(&dlg, SIGNAL(changeStartOfWeek(Qt::DayOfWeek)), ui->calendarWidget, SLOT(startOfWeekChanged(Qt::DayOfWeek)));
     connect(&dlg, SIGNAL(changePreferences()), m_config, SLOT(configChanged()));
     dlg.exec();
+}
+
+QString MainWindow::getLongMonthName(int month)
+{
+    switch (month) {
+    case 1:
+        return tr("January");
+    case 2:
+        return tr("February");
+    case 3:
+        return tr("March");
+    case 4:
+        return tr("April");
+    case 5:
+        return tr("May");
+    case 6:
+        return tr("June");
+    case 7:
+        return tr("July");
+    case 8:
+        return tr("August");
+    case 9:
+        return tr("September");
+    case 10:
+        return tr("October");
+    case 11:
+        return tr("November");
+    case 12:
+        return tr("December");
+    default:
+        return QString("");
+    }
 }

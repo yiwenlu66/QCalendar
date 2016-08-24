@@ -8,6 +8,7 @@ Calendar::Calendar(QWidget* parent)
     setGridVisible(true);
     setSelectionMode(QCalendarWidget::NoSelection);
     setStyleSheet("selection-background-color: yellow");
+    setNavigationBarVisible(false);
 }
 
 void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & date) const

@@ -18,6 +18,8 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
         break;
     }
 
+    ui->calendarWidget->setFirstDayOfWeek(config->pref()->startOfWeek);
+
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
 }
 
@@ -35,6 +37,7 @@ void MainWindow::preferencesTriggered()
 {
     PreferenceDialog dlg(m_config->pref());
     connect(&dlg, SIGNAL(changeLocale(QLocale)), this, SLOT(localeChanged(QLocale)));
+    connect(&dlg, SIGNAL(changeStartOfWeek(Qt::DayOfWeek)), ui->calendarWidget, SLOT(startOfWeekChanged(Qt::DayOfWeek)));
     connect(&dlg, SIGNAL(changePreferences()), m_config, SLOT(configChanged()));
     dlg.exec();
 }

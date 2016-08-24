@@ -21,12 +21,29 @@ PreferenceManager::PreferenceManager(const QJsonObject & json)
         language = getDefaultLanguage();
         break;
     }
+
+    QJsonValue startOfWeekValue = json.value("startOfWeek");
+    switch (startOfWeekValue.toInt(-1)) {
+    case Qt::Monday:
+    case Qt::Tuesday:
+    case Qt::Wednesday:
+    case Qt::Thursday:
+    case Qt::Friday:
+    case Qt::Saturday:
+    case Qt::Sunday:
+        startOfWeek = (Qt::DayOfWeek)startOfWeekValue.toInt();
+        break;
+    default:
+        startOfWeek = Qt::Sunday;
+        break;
+    }
 }
 
 QJsonObject PreferenceManager::toJson()
 {
     QJsonObject result;
     result.insert("language", QJsonValue(language));
+    result.insert("startOfWeek", QJsonValue(startOfWeek));
     return result;
 }
 

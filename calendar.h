@@ -7,8 +7,13 @@
 
 class Calendar : public QCalendarWidget
 {
+    Q_OBJECT
+
 public:
     Calendar(QWidget* parent = Q_NULLPTR);
+
+public slots:
+    void startOfWeekChanged(Qt::DayOfWeek);
 
 protected:
     void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const;

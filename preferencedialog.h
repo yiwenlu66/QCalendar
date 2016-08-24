@@ -14,6 +14,7 @@ class PreferenceDialog : public QDialog
     Q_OBJECT
 signals:
     void changeLocale(const QLocale& locate);
+    void changeStartOfWeek(Qt::DayOfWeek day);
     void changePreferences();
 
 protected slots:

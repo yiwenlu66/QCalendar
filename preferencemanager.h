@@ -13,6 +13,7 @@ public:
     PreferenceManager();
     PreferenceManager(const QJsonObject&);
     Language language;
+    Qt::DayOfWeek startOfWeek;
     QJsonObject toJson();
 
 private:

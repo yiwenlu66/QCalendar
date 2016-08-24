@@ -1,5 +1,6 @@
 #include "preferencedialog.h"
 #include "ui_preferencedialog.h"
+#include <QtDebug>
 
 PreferenceDialog::PreferenceDialog(PreferenceManager* pref, QWidget *parent) :
     QDialog(parent),
@@ -7,7 +8,8 @@ PreferenceDialog::PreferenceDialog(PreferenceManager* pref, QWidget *parent) :
     m_pref(pref)
 {
     ui->setupUi(this);
-    ui->comboBox->setCurrentIndex(pref->language);
+    ui->comboBox_language->setCurrentIndex(pref->language);
+    ui->comboBox_startOfWeek->setCurrentIndex(pref->startOfWeek - Qt::Monday);
 }
 
 PreferenceDialog::~PreferenceDialog()
@@ -18,7 +20,7 @@ PreferenceDialog::~PreferenceDialog()
 void PreferenceDialog::accept()
 {
     // update locale
-    switch (ui->comboBox->currentIndex()) {
+    switch (ui->comboBox_language->currentIndex()) {
     case 0:
         // english
         m_pref->language = PreferenceManager::ENGLISH;
@@ -32,6 +34,12 @@ void PreferenceDialog::accept()
     default:
         break;
     }
+
+    // update start of week
+    Qt::DayOfWeek startOfWeek = (Qt::DayOfWeek)(ui->comboBox_startOfWeek->currentIndex() + Qt::Monday);
+    m_pref->startOfWeek = startOfWeek;
+    emit changeStartOfWeek(startOfWeek);
+
     emit changePreferences();
     QDialog::accept();
 }

@@ -21,3 +21,8 @@ void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & d
     }
     painter->drawText(rect, Qt::AlignTop | Qt::AlignRight, QString::number(date.day()));
 }
+
+void Calendar::startOfWeekChanged(Qt::DayOfWeek day)
+{
+    setFirstDayOfWeek(day);
+}

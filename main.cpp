@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 
     ConfigLoader* config = new ConfigLoader;
 
-    MainWindow mainWindow(&app, config);
+    MainWindow mainWindow(config);
     mainWindow.show();
 
     return app.exec();

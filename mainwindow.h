@@ -22,13 +22,12 @@ private slots:
     void preferencesTriggered();
 
 public:
-    explicit MainWindow(QApplication* app, ConfigLoader* config, QWidget *parent = 0);
+    explicit MainWindow(ConfigLoader* config, QWidget *parent = 0);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
 
-    QApplication* m_app;
     QTranslator* m_appTranslator;
     QTranslator* m_qtTranslator;
 

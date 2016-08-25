@@ -2,11 +2,11 @@
 #include "preferencedialog.h"
 #include "ui_mainwindow.h"
 #include <QTranslator>
+#include <QApplication>
 
-MainWindow::MainWindow(QApplication* app, ConfigLoader* config, QWidget *parent) :
+MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_app(app),
     m_appTranslator(new QTranslator),
     m_qtTranslator(new QTranslator),
     m_config(config)
@@ -42,11 +42,11 @@ void MainWindow::localeChanged(const QLocale& locale)
 {
     ui->calendarWidget->setLocale(locale);
     if (locale == QLocale::Chinese) {
-        m_app->installTranslator(m_appTranslator);
-        m_app->installTranslator(m_qtTranslator);
+        qApp->installTranslator(m_appTranslator);
+        qApp->installTranslator(m_qtTranslator);
     } else {
-        m_app->removeTranslator(m_appTranslator);
-        m_app->removeTranslator(m_qtTranslator);
+        qApp->removeTranslator(m_appTranslator);
+        qApp->removeTranslator(m_qtTranslator);
     }
     ui->retranslateUi(this);
 }

@@ -150,14 +150,17 @@ void DataAdapter::deleteSeries(const QString& sha1)
 QList<QStringList> DataAdapter::getEventsForMonth(int year, int month) const
 {
     QList<QStringList> result;
+    QDate firstDayOfMonth(year, month, 1);
     if (m_dates.isEmpty()) {
+        for (int i = 0; i <= firstDayOfMonth.daysInMonth(); ++i) {
+            result.append(QStringList());
+        }
         return result;
     }
-    QDate firstDayOfMonth(year, month, 1);
     auto lo = m_dates.lowerBound(firstDayOfMonth);
     result.append(QStringList());	// leave the element at index 0 blank
     for (int i = 1; i <= firstDayOfMonth.daysInMonth(); ++i) {
-        if (i == lo.key().day()) {
+        if (i == lo.key().day() && lo.key().month() == month) {
             QStringList dayList;
             for (QString sha1 : lo.value()) {
                 dayList.append(sha1);

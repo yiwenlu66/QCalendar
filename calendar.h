@@ -26,6 +26,7 @@ protected:
 private:
     static const int FONTSIZE_DAYOFMONTH = 16;
     static const int FONTSIZE_ITEMTITLE = 12;
+    static constexpr char COLOR_TODAY[] = "#FFF8DC";
     DataAdapter* m_dataAdapter;
     QList<QStringList> m_monthEventList;
 };

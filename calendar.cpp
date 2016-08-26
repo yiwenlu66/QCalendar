@@ -1,23 +1,29 @@
 #include "calendar.h"
 #include <QLocale>
 #include <QFontMetrics>
+#include <QDateTime>
 
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
+const char Calendar::COLOR_TODAY[];
 
 Calendar::Calendar(QWidget* parent):
     QCalendarWidget(parent)
 {
     setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
     setGridVisible(true);
-    setSelectionMode(QCalendarWidget::NoSelection);
-    setStyleSheet("selection-background-color: cornsilk");
+    setStyleSheet("selection-background-color: white");
     setNavigationBarVisible(false);
     connect(this, SIGNAL(currentPageChanged(int,int)), this, SLOT(loadMonthEventList()));
 }
 
 void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & date) const
 {
+    if (date == QDateTime::currentDateTime().date()) {
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(QColor(COLOR_TODAY));
+        painter->drawRect(rect);
+    }
     if (date.month() != monthShown()) {
         painter->setPen(Qt::lightGray);
     } else if (date.dayOfWeek() == Qt::Saturday || date.dayOfWeek() == Qt::Sunday) {

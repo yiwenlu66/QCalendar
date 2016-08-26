@@ -6,6 +6,13 @@
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
 const char Calendar::COLOR_TODAY[];
+const int Calendar::MARGIN_BELOW_DAY;
+const int Calendar::MARGIN_BETWEEN_TILES;
+const int Calendar::MARGIN_TILE_SIDE;
+const int Calendar::PADDING_TOP;
+const int Calendar::PADDING_BOTTOM;
+const int Calendar::PADDING_LEFT;
+const int Calendar::PADDING_RIGHT;
 
 Calendar::Calendar(QWidget* parent):
     QCalendarWidget(parent)
@@ -37,26 +44,33 @@ void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & d
     QFontMetrics itemTitleMetrics(itemTitleFont);
     painter->setFont(itemTitleFont);
     if (date.month() == monthShown() && !m_monthEventList[date.day()].isEmpty()) {
-        int maxLine = (rect.height() - FONTSIZE_DAYOFMONTH) / (FONTSIZE_ITEMTITLE + 3);
+        int maxLine = (rect.height() - FONTSIZE_DAYOFMONTH - MARGIN_BELOW_DAY) /
+                (PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES);
         painter->save();
         painter->translate(rect.x(), rect.y());
-        painter->translate(0, FONTSIZE_DAYOFMONTH + 1);
+        painter->translate(MARGIN_TILE_SIDE, FONTSIZE_DAYOFMONTH + MARGIN_BELOW_DAY);
         auto dayList = m_monthEventList[date.day()];
         for (int i = 0; i < dayList.size(); ++i) {
             if (i == maxLine - 1 && i < dayList.size() - 1) {
                 painter->setPen(Qt::gray);
-                painter->drawText(1, FONTSIZE_ITEMTITLE + 1, tr("%1 More").arg(dayList.size() - i));
+                painter->drawText(PADDING_LEFT, FONTSIZE_ITEMTITLE + PADDING_TOP,
+                                  tr("%1 More").arg(dayList.size() - i));
                 break;
             }
             QString sha1 = dayList[i];
             const CalendarEvent* event = m_dataAdapter->getEvent(sha1);
             painter->setPen(Qt::NoPen);
             painter->setBrush(event->color);
-            painter->drawRect(1, 0, rect.width() - 2, FONTSIZE_ITEMTITLE + 2);
+            painter->drawRect(0, 0, rect.width() - 2 * MARGIN_TILE_SIDE,
+                              PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM);
+            painter->save();
+            painter->translate(PADDING_LEFT, PADDING_TOP + FONTSIZE_ITEMTITLE);
             painter->setPen(Qt::black);
-            QString elidedTitle = itemTitleMetrics.elidedText(event->title, Qt::ElideRight, rect.width() - 3);
-            painter->drawText(2, FONTSIZE_ITEMTITLE + 1, elidedTitle);
-            painter->translate(0, FONTSIZE_ITEMTITLE + 3);
+            QString elidedTitle = itemTitleMetrics.elidedText(event->title, Qt::ElideRight,
+                                                              rect.width() - PADDING_LEFT - PADDING_RIGHT - 2 * MARGIN_TILE_SIDE);
+            painter->drawText(0, 0, elidedTitle);
+            painter->restore();
+            painter->translate(0, PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES);
         }
         painter->restore();
     }

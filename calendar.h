@@ -26,6 +26,13 @@ protected:
 private:
     static const int FONTSIZE_DAYOFMONTH = 16;
     static const int FONTSIZE_ITEMTITLE = 12;
+    static const int MARGIN_BELOW_DAY = 4;
+    static const int MARGIN_BETWEEN_TILES = 2;
+    static const int MARGIN_TILE_SIDE = 2;
+    static const int PADDING_TOP = 2;
+    static const int PADDING_BOTTOM = 2;
+    static const int PADDING_LEFT = 2;
+    static const int PADDING_RIGHT = 2;
     static constexpr char COLOR_TODAY[] = "#FFF8DC";
     DataAdapter* m_dataAdapter;
     QList<QStringList> m_monthEventList;

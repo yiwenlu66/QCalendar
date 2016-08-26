@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>875</width>
+    <height>750</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -94,7 +94,13 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="Calendar" name="calendarWidget"/>
+       <widget class="Calendar" name="calendarWidget">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -105,7 +111,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>875</width>
      <height>22</height>
     </rect>
    </property>

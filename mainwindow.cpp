@@ -26,6 +26,8 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
         break;
     }
 
+    ui->calendarWidget->setDataAdapter(config->data());
+
     ui->calendarWidget->setFirstDayOfWeek(config->pref()->startOfWeek);
 
     monthChanged(QDate::currentDate().year(), QDate::currentDate().month());

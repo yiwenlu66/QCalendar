@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include <QTranslator>
 #include <QApplication>
+#include <QtDebug>
 
 MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     QMainWindow(parent),

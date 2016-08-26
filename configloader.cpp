@@ -13,7 +13,8 @@ constexpr char ConfigLoader::FILENAME[];
 
 ConfigLoader::ConfigLoader(QObject *parent) :
     QObject(parent),
-    m_pref(nullptr)
+    m_pref(nullptr),
+    m_data(nullptr)
 {
     QString dataPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     QDir dataDir = QDir(dataPath);
@@ -32,15 +33,27 @@ ConfigLoader::ConfigLoader(QObject *parent) :
         if (prefValue.isObject()) {
             m_pref = new PreferenceManager(prefValue.toObject());
         }
+        QJsonValue itemsValue = jsonObject.value(DataAdapter::KEY_ITEMS);
+        QJsonValue datesValue = jsonObject.value(DataAdapter::KEY_DATES);
+        if (itemsValue.isObject() && datesValue.isArray()) {
+            QJsonObject dataObject;
+            dataObject.insert(DataAdapter::KEY_ITEMS, itemsValue);
+            dataObject.insert(DataAdapter::KEY_DATES, datesValue);
+            m_data = new DataAdapter(dataObject);
+        }
     }
     if (m_pref == nullptr) {
         m_pref = new PreferenceManager;
+    }
+    if (m_data == nullptr) {
+        m_data = new DataAdapter;
     }
 }
 
 void ConfigLoader::configChanged()
 {
     QJsonObject jsonObject;
+    jsonObject = m_data->toJson();
     jsonObject.insert(KEY_PREF, m_pref->toJson());
     QJsonDocument jsonDocument(jsonObject);
     if (m_jsonFile->isOpen()) {

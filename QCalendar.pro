@@ -12,13 +12,17 @@ INCLUDEPATH += .
 HEADERS += calendar.h mainwindow.h \
     preferencedialog.h \
     preferencemanager.h \
-    configloader.h
+    configloader.h \
+    dataadapter.h \
+    calendarevent.h
 FORMS += mainwindow.ui \
     preferencedialog.ui
 SOURCES += calendar.cpp main.cpp mainwindow.cpp \
     preferencedialog.cpp \
     preferencemanager.cpp \
-    configloader.cpp
+    configloader.cpp \
+    dataadapter.cpp \
+    calendarevent.cpp
 TRANSLATIONS += QCalendar_zh_CN.ts
 
 RESOURCES += \

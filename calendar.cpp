@@ -13,7 +13,7 @@ Calendar::Calendar(QWidget* parent)
 
 void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & date) const
 {
-    if (date.month() != QDate::currentDate().month()) {
+    if (date.month() != monthShown()) {
         painter->setPen(Qt::lightGray);
     } else if (date.dayOfWeek() == Qt::Saturday || date.dayOfWeek() == Qt::Sunday) {
         painter->setPen(Qt::red);

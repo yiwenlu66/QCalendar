@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EventDialog</class>
+ <widget class="QDialog" name="EventDialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>517</width>
+    <height>453</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Event Details</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1" colspan="4">
+    <widget class="QLineEdit" name="lineEdit_title"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Repeat:</string>
+     </property>
+     <property name="buddy">
+      <cstring>comboBox_repeat</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="4">
+    <widget class="QLineEdit" name="lineEdit_location"/>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="comboBox_repeat">
+     <item>
+      <property name="text">
+       <string>Once</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Daily</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Weekly</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Monthly</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Yearly</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Custom</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QTimeEdit" name="timeEdit_start"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>Color:</string>
+     </property>
+     <property name="buddy">
+      <cstring>comboBox_color</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>Comments:</string>
+     </property>
+     <property name="buddy">
+      <cstring>textEdit_comments</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>194</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="0">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Delete event</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Date:</string>
+     </property>
+     <property name="buddy">
+      <cstring>dateEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_repeatInterval">
+     <item>
+      <widget class="QLabel" name="label_repeatInterval_1">
+       <property name="text">
+        <string>Once every</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_repeatInterval</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_repeatInterval"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_repeatInterval_2">
+       <property name="text">
+        <string>days</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>Location:</string>
+     </property>
+     <property name="buddy">
+      <cstring>lineEdit_location</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Title:</string>
+     </property>
+     <property name="buddy">
+      <cstring>lineEdit_title</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDateEdit" name="dateEdit"/>
+   </item>
+   <item row="8" column="3" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="comboBox_color"/>
+   </item>
+   <item row="6" column="1" rowspan="2" colspan="4">
+    <widget class="QTextEdit" name="textEdit_comments"/>
+   </item>
+   <item row="2" column="4">
+    <layout class="QHBoxLayout" name="horizontalLayout_repeatCount">
+     <item>
+      <widget class="QLabel" name="label_repeatCount_1">
+       <property name="text">
+        <string>for</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_repeatCount</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_repeatCount"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_repeatCount_2">
+       <property name="text">
+        <string>times</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_repeatCount</cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Starting time:</string>
+     </property>
+     <property name="buddy">
+      <cstring>timeEdit_start</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Ending time:</string>
+       </property>
+       <property name="buddy">
+        <cstring>timeEdit_end</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTimeEdit" name="timeEdit_end"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>buttonBox</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>dateEdit</zorder>
+  <zorder>label_3</zorder>
+  <zorder>lineEdit_title</zorder>
+  <zorder>comboBox_repeat</zorder>
+  <zorder>label_8</zorder>
+  <zorder>timeEdit_start</zorder>
+  <zorder>label_10</zorder>
+  <zorder>comboBox_color</zorder>
+  <zorder>label_11</zorder>
+  <zorder>lineEdit_location</zorder>
+  <zorder>label_12</zorder>
+  <zorder>textEdit_comments</zorder>
+  <zorder>verticalSpacer</zorder>
+  <zorder>pushButton</zorder>
+  <zorder></zorder>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>EventDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>EventDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

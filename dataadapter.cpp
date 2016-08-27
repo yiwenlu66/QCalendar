@@ -1,5 +1,6 @@
 #include "dataadapter.h"
 #include <QJsonArray>
+#include <algorithm>
 
 constexpr char DataAdapter::KEY_ITEMS[];
 constexpr char DataAdapter::KEY_DATES[];
@@ -58,6 +59,7 @@ DataAdapter::DataAdapter(const QJsonObject & json)
                 dates.append(date);
             }
         }
+        std::sort(dates.begin(), dates.end());
         if (dates.isEmpty()) {
             continue;
         }

@@ -2,6 +2,7 @@
 #include <QLocale>
 #include <QFontMetrics>
 #include <QDateTime>
+#include <QTimer>
 
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
@@ -13,6 +14,7 @@ const int Calendar::PADDING_TOP;
 const int Calendar::PADDING_BOTTOM;
 const int Calendar::PADDING_LEFT;
 const int Calendar::PADDING_RIGHT;
+const int Calendar::FREEZE_PERIOD;
 
 Calendar::Calendar(QWidget* parent):
     QCalendarWidget(parent)
@@ -22,10 +24,19 @@ Calendar::Calendar(QWidget* parent):
     setStyleSheet("selection-background-color: white");
     setNavigationBarVisible(false);
     connect(this, SIGNAL(currentPageChanged(int,int)), this, SLOT(loadMonthEventList()));
+    connect(this, SIGNAL(currentPageChanged(int,int)), this, SLOT(freezeDoubleClick()));
 }
 
 void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & date) const
 {
+    if (xPivots.isEmpty() || rect.x() > xPivots.last()) {
+        xPivots.append(rect.x());
+        cellWidths.append(rect.width());
+    }
+    if (yPivots.isEmpty() || rect.y() > yPivots.last()) {
+        yPivots.append(rect.y());
+        cellHeights.append(rect.height());
+    }
     if (date == QDateTime::currentDateTime().date()) {
         painter->setPen(Qt::NoPen);
         painter->setBrush(QColor(COLOR_TODAY));
@@ -91,4 +102,71 @@ void Calendar::setDataAdapter(DataAdapter *dataAdapter)
 {
     m_dataAdapter = dataAdapter;
     loadMonthEventList();
+}
+
+void Calendar::freezeDoubleClick()
+{
+    doubleClickFreezed = true;
+    QTimer::singleShot(FREEZE_PERIOD, [this]{ doubleClickFreezed = false; });
+}
+
+void Calendar::doubleClicked(int x, int y)
+{
+    // dirty hack: exclude header and cells from adjacent months
+    if (y < yPivots.first() || doubleClickFreezed) {
+        return;
+    }
+    int xInCell, yInCell, cellWidth = 0, cellHeight = 0;
+    for (int i = xPivots.size() - 1; i >= 0; --i) {
+        xInCell = x - xPivots[i];
+        if (xInCell >= 0) {
+            cellWidth = cellWidths[i];
+            break;
+        }
+    }
+    for (int i = yPivots.size() - 1; i >= 0; --i) {
+        yInCell = y - yPivots[i];
+        if (yInCell >= 0) {
+            cellHeight = cellHeights[i];
+            break;
+        }
+    }
+    int index = getTileIndex(xInCell, yInCell, cellWidth, cellHeight);
+    int maxLine = (cellHeight - FONTSIZE_DAYOFMONTH - MARGIN_BELOW_DAY) /
+        (PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES);
+    QStringList dayList = m_monthEventList[selectedDate().day()];
+    if (dayList.size() <= maxLine) {
+        if (0 <= index && index < maxLine) {
+            emit showEventDialog(dayList[index]);
+        }
+    } else {
+        if (0 <= index && index < maxLine - 1) {
+            emit showEventDialog(dayList[index]);
+        } else if (index == maxLine - 1) {
+            // TODO: show "more" list
+        }
+    }
+}
+
+void Calendar::cellsResized()
+{
+    xPivots.clear();
+    yPivots.clear();
+    cellWidths.clear();
+    cellHeights.clear();
+}
+
+int Calendar::getTileIndex(int x, int y, int cellWidth, int cellHeight)
+{
+    if (x <= MARGIN_TILE_SIDE || x >= cellWidth - MARGIN_TILE_SIDE) {
+        return -1;
+    }
+    int baseY = FONTSIZE_DAYOFMONTH + MARGIN_BELOW_DAY;
+    int dy = PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES;
+    for (int i = 0; baseY + dy <= cellHeight; ++i, baseY += dy) {
+        if (baseY < y && y < baseY + dy) {
+            return i;
+        }
+    }
+    return -1;
 }

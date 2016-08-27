@@ -17,12 +17,18 @@ class MainWindow : public QMainWindow
 public slots:
     void localeChanged(const QLocale& locale);
     void monthChanged(int year, int month);
+    void showEventDialog(const QString& sha1);
 
 private slots:
     void preferencesTriggered();
 
+signals:
+    void doubleClick(int x, int y);
+    void resizeCells();
+
 public:
     explicit MainWindow(ConfigLoader* config, QWidget *parent = 0);
+    bool eventFilter(QObject *watched, QEvent *event);
     ~MainWindow();
 
 private:

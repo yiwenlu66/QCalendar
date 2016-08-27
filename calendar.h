@@ -16,9 +16,17 @@ public:
 
 public slots:
     void startOfWeekChanged(Qt::DayOfWeek);
+    void doubleClicked(int x, int y);
+    void cellsResized();
 
 private slots:
     void loadMonthEventList();
+
+    // dirty hack: disable double click action for a very short period of time after month changes to avoid over-sensitive actions
+    void freezeDoubleClick();
+
+signals:
+    void showEventDialog(const QString &);
 
 protected:
     void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const;
@@ -34,6 +42,16 @@ private:
     static const int PADDING_LEFT = 2;
     static const int PADDING_RIGHT = 2;
     static constexpr char COLOR_TODAY[] = "#FFF8DC";
+    static const int FREEZE_PERIOD = 500;
+    bool doubleClickFreezed = false;
+    mutable QList<int> xPivots, yPivots, cellWidths, cellHeights;    // record starting coordinates and metrics of all cells
+
+    /*
+     * tell which tile in the cell the position belongs to; x and y are coordinates *within* the cell;
+     * return -1 if the position belongs to a blank area.
+     */
+    int getTileIndex(int x, int y, int cellWidth, int cellHeight);
+
     DataAdapter* m_dataAdapter;
     QList<QStringList> m_monthEventList;
 };

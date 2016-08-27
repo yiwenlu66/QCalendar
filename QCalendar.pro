@@ -14,15 +14,18 @@ HEADERS += calendar.h mainwindow.h \
     preferencemanager.h \
     configloader.h \
     dataadapter.h \
-    calendarevent.h
+    calendarevent.h \
+    eventdialog.h
 FORMS += mainwindow.ui \
-    preferencedialog.ui
+    preferencedialog.ui \
+    eventdialog.ui
 SOURCES += calendar.cpp main.cpp mainwindow.cpp \
     preferencedialog.cpp \
     preferencemanager.cpp \
     configloader.cpp \
     dataadapter.cpp \
-    calendarevent.cpp
+    calendarevent.cpp \
+    eventdialog.cpp
 TRANSLATIONS += QCalendar_zh_CN.ts
 
 RESOURCES += \

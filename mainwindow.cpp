@@ -1,8 +1,11 @@
 #include "mainwindow.h"
 #include "preferencedialog.h"
+#include "eventdialog.h"
 #include "ui_mainwindow.h"
 #include <QTranslator>
 #include <QApplication>
+#include <QMouseEvent>
+#include <QTableView>
 #include <QtDebug>
 
 MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
@@ -26,12 +29,16 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
         break;
     }
 
+    QTableView* tableView = ui->calendarWidget->findChild<QTableView*>("qt_calendar_calendarview");
+    tableView->installEventFilter(this);
     ui->calendarWidget->setDataAdapter(config->data());
-
     ui->calendarWidget->setFirstDayOfWeek(config->pref()->startOfWeek);
 
     monthChanged(QDate::currentDate().year(), QDate::currentDate().month());
     connect(ui->calendarWidget, SIGNAL(currentPageChanged(int,int)), this, SLOT(monthChanged(int,int)));
+    connect(this, SIGNAL(doubleClick(int,int)), ui->calendarWidget, SLOT(doubleClicked(int,int)));
+    connect(this, SIGNAL(resizeCells()), ui->calendarWidget, SLOT(cellsResized()));
+    connect(ui->calendarWidget, SIGNAL(showEventDialog(QString)), this, SLOT(showEventDialog(QString)));
 
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
 }
@@ -99,4 +106,22 @@ QString MainWindow::getLongMonthName(int month)
     default:
         return QString("");
     }
+}
+
+bool MainWindow::eventFilter(QObject *, QEvent *event)
+{
+    // dirty hack: the first click will be captured by QCalendarWidget, so MouseButtonRelease indicates a double click
+    if (event->type() == QEvent::MouseButtonRelease) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        emit doubleClick(mouseEvent->x(), mouseEvent->y());
+    } else if (event->type() == QEvent::Resize) {
+        emit resizeCells();
+    }
+    return false;
+}
+
+void MainWindow::showEventDialog(const QString &sha1)
+{
+    EventDialog dlg(*(m_config->data()->getEvent(sha1)));
+    dlg.exec();
 }

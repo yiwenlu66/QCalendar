@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "preferencedialog.h"
-#include "eventdialog.h"
 #include "ui_mainwindow.h"
 #include <QTranslator>
 #include <QApplication>
@@ -38,7 +37,6 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     connect(ui->calendarWidget, SIGNAL(currentPageChanged(int,int)), this, SLOT(monthChanged(int,int)));
     connect(this, SIGNAL(doubleClick(int,int)), ui->calendarWidget, SLOT(doubleClicked(int,int)));
     connect(this, SIGNAL(resizeCells()), ui->calendarWidget, SLOT(cellsResized()));
-    connect(ui->calendarWidget, SIGNAL(showEventDialog(QString)), this, SLOT(showEventDialog(QString)));
 
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
 }
@@ -120,8 +118,3 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-void MainWindow::showEventDialog(const QString &sha1)
-{
-    EventDialog dlg(*(m_config->data()->getEvent(sha1)));
-    dlg.exec();
-}

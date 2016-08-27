@@ -17,7 +17,6 @@ class MainWindow : public QMainWindow
 public slots:
     void localeChanged(const QLocale& locale);
     void monthChanged(int year, int month);
-    void showEventDialog(const QString& sha1);
 
 private slots:
     void preferencesTriggered();

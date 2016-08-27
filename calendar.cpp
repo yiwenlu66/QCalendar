@@ -1,4 +1,5 @@
 #include "calendar.h"
+#include "eventdialog.h"
 #include "eventlistdialog.h"
 #include <QLocale>
 #include <QFontMetrics>
@@ -139,15 +140,21 @@ void Calendar::doubleClicked(int x, int y)
     QStringList dayList = m_monthEventList[selectedDate().day()];
     if (dayList.size() <= maxLine) {
         if (0 <= index && index < maxLine) {
-            emit showEventDialog(dayList[index]);
+            showEventDialog(dayList[index]);
         }
     } else {
         if (0 <= index && index < maxLine - 1) {
-            emit showEventDialog(dayList[index]);
+            showEventDialog(dayList[index]);
         } else if (index == maxLine - 1) {
             showEventList(dayList);
         }
     }
+}
+
+void Calendar::showEventDialog(const QString &sha1)
+{
+    EventDialog dlg(*(m_dataAdapter->getEvent(sha1)), this);
+    dlg.exec();
 }
 
 void Calendar::showEventList(const QStringList &sha1List)

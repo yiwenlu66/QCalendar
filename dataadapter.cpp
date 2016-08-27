@@ -191,6 +191,9 @@ QList<QStringList> DataAdapter::getEventsForMonth(int year, int month) const
             for (QString sha1 : lo.value()) {
                 dayList.append(sha1);
             }
+            std::sort(dayList.begin(), dayList.end(), [this](const QString& k1, const QString& k2) {
+                return getEvent(k1)->startTime < getEvent(k2)->startTime;
+            });
             result.append(dayList);
             ++lo;
         } else {

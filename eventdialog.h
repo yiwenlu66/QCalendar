@@ -34,11 +34,16 @@ public:
     ~EventDialog();
 
 public slots:
+    void repeatModeSet();
     void repeatModeChanged();
 
 private:
     Ui::EventDialog *ui;
     static RepeatMode getRepeatMode(const QList<QDate>&);
+    void hideRepeatIntervalUi();
+    void showRepeatIntervalUi();
+    void hideRepeatCountUi();
+    void showRepeatCountUi();
 };
 
 #endif // EVENTDIALOG_H

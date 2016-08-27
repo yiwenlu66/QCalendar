@@ -63,30 +63,74 @@ EventDialog::EventDialog(const CalendarEvent& event, QWidget *parent) :
     ui->comboBox_repeat->setCurrentIndex(repeatModeIndex);
     ui->lineEdit_repeatInterval->setText(QString::number(repeatInterval));
     ui->lineEdit_repeatCount->setText(QString::number(repeatCount));
-    repeatModeChanged();
+    repeatModeSet();
+}
+
+void EventDialog::repeatModeSet()
+{
+    if (ui->lineEdit_repeatInterval->text().toInt()) {
+        showRepeatIntervalUi();
+    } else {
+        hideRepeatIntervalUi();
+    }
+
+    if (ui->lineEdit_repeatCount->text().toInt() >= 2) {
+        showRepeatCountUi();
+    } else {
+        hideRepeatCountUi();
+    }
 }
 
 void EventDialog::repeatModeChanged()
 {
-    if (ui->lineEdit_repeatInterval->text().toInt()) {
-        ui->label_repeatInterval_1->show();
-        ui->label_repeatInterval_2->show();
-        ui->lineEdit_repeatInterval->show();
-    } else {
-        ui->label_repeatInterval_1->hide();
-        ui->label_repeatInterval_2->hide();
-        ui->lineEdit_repeatInterval->hide();
+    switch (ui->comboBox_repeat->currentIndex()) {
+    case 0:
+        // once
+        hideRepeatIntervalUi();
+        hideRepeatCountUi();
+        break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+        // daily, weekly, monthly, yearly
+        hideRepeatIntervalUi();
+        showRepeatCountUi();
+        break;
+    case 5:
+        // custom
+        showRepeatIntervalUi();
+        showRepeatCountUi();
+        break;
     }
+}
 
-    if (ui->lineEdit_repeatCount->text().toInt() >= 2) {
-        ui->label_repeatCount_1->show();
-        ui->label_repeatCount_2->show();
-        ui->lineEdit_repeatCount->show();
-    } else {
-        ui->label_repeatCount_1->hide();
-        ui->label_repeatCount_2->hide();
-        ui->lineEdit_repeatCount->hide();
-    }
+void EventDialog::hideRepeatIntervalUi()
+{
+    ui->label_repeatInterval_1->hide();
+    ui->label_repeatInterval_2->hide();
+    ui->lineEdit_repeatInterval->hide();
+}
+
+void EventDialog::showRepeatIntervalUi()
+{
+    ui->label_repeatInterval_1->show();
+    ui->label_repeatInterval_2->show();
+    ui->lineEdit_repeatInterval->show();
+}
+
+void EventDialog::hideRepeatCountUi()
+{
+    ui->label_repeatCount_1->hide();
+    ui->label_repeatCount_2->hide();
+    ui->lineEdit_repeatCount->hide();
+}
+
+void EventDialog::showRepeatCountUi()
+{
+    ui->label_repeatCount_1->show();
+    ui->label_repeatCount_2->show();
+    ui->lineEdit_repeatCount->show();
 }
 
 

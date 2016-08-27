@@ -27,7 +27,19 @@ ConfigLoader::ConfigLoader(QObject *parent) :
         QMessageBox::critical(0, tr("Error"), tr("Cannot open config file!"));
         QApplication::quit();
     }
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(m_jsonFile->readAll());
+    readJson(m_jsonFile->readAll());
+    connect(m_data, SIGNAL(updateData()), this, SLOT(configChanged()));
+}
+
+void ConfigLoader::readJson(const QByteArray &json)
+{
+    if (m_pref != nullptr) {
+        delete m_pref;
+    }
+    if (m_data != nullptr) {
+        delete m_data;
+    }
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(json);
     if (jsonDocument.isObject()) {
         QJsonObject jsonObject = jsonDocument.object();
         QJsonValue prefValue = jsonObject.value(KEY_PREF);
@@ -49,7 +61,7 @@ ConfigLoader::ConfigLoader(QObject *parent) :
     if (m_data == nullptr) {
         m_data = new DataAdapter;
     }
-    connect(m_data, SIGNAL(updateData()), this, SLOT(configChanged()));
+    configChanged();
 }
 
 void ConfigLoader::configChanged()

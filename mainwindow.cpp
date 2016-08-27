@@ -42,6 +42,7 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
 
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
     connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportTriggered()));
+    connect(ui->actionImport, SIGNAL(triggered(bool)), this, SLOT(importTriggered()));
 }
 
 MainWindow::~MainWindow()
@@ -87,6 +88,19 @@ void MainWindow::exportTriggered()
         QFile::remove(filePath);
     }
     QFile::copy(m_config->path(), filePath);
+}
+
+void MainWindow::importTriggered()
+{
+    QString defaultPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
+                                                    defaultPath, tr("Json file (*.json)"));
+    QFile file(filePath);
+    file.open(QIODevice::ReadOnly);
+    m_config->readJson(file.readAll());
+    file.close();
+    ui->calendarWidget->setDataAdapter(m_config->data());
+    ui->calendarWidget->setFocus();
 }
 
 QString MainWindow::getLongMonthName(int month)

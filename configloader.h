@@ -21,6 +21,7 @@ public:
     QString path() const {
         return m_jsonFilePath;
     }
+    void readJson(const QByteArray& json);
 
     ~ConfigLoader();
 

@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QDir>
+#include <QtDebug>
 
 MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     QMainWindow(parent),
@@ -167,3 +168,10 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape && ui->actionPin_Window->isChecked()) {
+        ui->actionPin_Window->setChecked(false);
+        setPinWindow(false);
+    }
+}

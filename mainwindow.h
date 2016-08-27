@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QLocale>
+#include <QKeyEvent>
 #include "configloader.h"
 
 namespace Ui {
@@ -31,6 +32,7 @@ signals:
 public:
     explicit MainWindow(ConfigLoader* config, QWidget *parent = 0);
     bool eventFilter(QObject *watched, QEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     ~MainWindow();
 
 private:

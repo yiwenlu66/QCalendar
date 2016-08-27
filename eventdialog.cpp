@@ -17,7 +17,7 @@ EventDialog::EventDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     for (int i = 0; i <= Color::MAX_COLOR; ++i) {
-        ui->comboBox_color->addItem(Color::getName(i));
+        ui->comboBox_color->addItem(Color::getIcon(i), Color::getName(i));
     }
 
     // title must contain at least 1 non-space character

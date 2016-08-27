@@ -1,4 +1,5 @@
 #include "color.h"
+#include <QPixmap>
 
 Color::Color()
 {
@@ -47,4 +48,11 @@ QString Color::getName(int i)
     default:
         return "White";
     }
+}
+
+QIcon Color::getIcon(int i, int size)
+{
+    QPixmap pixmap(size, size);
+    pixmap.fill(getColor(i));
+    return QIcon(pixmap);
 }

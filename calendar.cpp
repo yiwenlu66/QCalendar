@@ -1,6 +1,7 @@
 #include "calendar.h"
 #include "eventdialog.h"
 #include "eventlistdialog.h"
+#include "color.h"
 #include <QLocale>
 #include <QFontMetrics>
 #include <QDateTime>
@@ -77,7 +78,7 @@ void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & d
             QString sha1 = dayList[i];
             const CalendarEvent* event = m_dataAdapter->getEvent(sha1);
             painter->setPen(Qt::NoPen);
-            painter->setBrush(event->color);
+            painter->setBrush(Color::getColor(event->color));
             painter->drawRect(0, 0, rect.width() - 2 * MARGIN_TILE_SIDE,
                               PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM);
             painter->save();

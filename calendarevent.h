@@ -9,9 +9,9 @@
 class CalendarEvent
 {
 public:
-    CalendarEvent(Qt::GlobalColor color, QList<QDate> dates, QTime startTime, QTime endTime,
+    CalendarEvent(int color, QList<QDate> dates, QTime startTime, QTime endTime,
                   QString title, QString location, QString comments);
-    Qt::GlobalColor color;
+    int color;
     QList<QDate> dates;
     QTime startTime;
     QTime endTime;

@@ -1,4 +1,5 @@
 #include "eventlistdialog.h"
+#include "color.h"
 #include "ui_eventlistdialog.h"
 #include <QAbstractItemView>
 #include <QSize>
@@ -52,16 +53,16 @@ void ColoredItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
     QString item = index.model()->data(index, Qt::DisplayRole).toString();
     int splitIndex = item.lastIndexOf(",");
     QString title = item.left(splitIndex);
-    Qt::GlobalColor color = (Qt::GlobalColor)item.mid(splitIndex + 1).toInt();
+    QColor color = Color::getColor(item.mid(splitIndex + 1).toInt());
     if (option.state & QStyle::State_Selected) {
-        painter->fillRect(option.rect.adjusted(0, 0, 0, -MARGIN), option.palette.highlight());
+        painter->fillRect(option.rect.adjusted(0, 0, 0, -MARGIN), option.palette.highlight().color().darker());
     } else {
         painter->fillRect(option.rect.adjusted(0, 0, 0, -MARGIN), color);
     }
     painter->save();
     painter->translate(option.rect.x(), option.rect.y());
     painter->translate(PADDING_LEFT, PADDING_TOP + FONT_SIZE);
-    painter->setPen(Qt::black);
+    painter->setPen(option.state & QStyle::State_Selected ? Qt::white : Qt::black);
     QFont font = QFont("Sans", FONT_SIZE);
     QFontMetrics metrics(font);
     painter->setFont(font);

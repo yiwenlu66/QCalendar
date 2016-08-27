@@ -42,11 +42,8 @@ DataAdapter::DataAdapter(const QJsonObject & json)
             continue;
         }
 
-        int colorInt = jsonItem.value(KEY_ITEM_COLOR).toInt(-1);
-        Qt::GlobalColor color;
-        if (Qt::color0 <= colorInt && colorInt <= Qt::transparent) {
-            color = (Qt::GlobalColor)colorInt;
-        } else {
+        int color = jsonItem.value(KEY_ITEM_COLOR).toInt(-1);
+        if (color == -1) {
             continue;
         }
 

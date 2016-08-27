@@ -17,7 +17,8 @@ HEADERS += calendar.h mainwindow.h \
     calendarevent.h \
     eventdialog.h \
     eventlistdialog.h \
-    deletedialog.h
+    deletedialog.h \
+    color.h
 FORMS += mainwindow.ui \
     preferencedialog.ui \
     eventdialog.ui \
@@ -31,7 +32,8 @@ SOURCES += calendar.cpp main.cpp mainwindow.cpp \
     calendarevent.cpp \
     eventdialog.cpp \
     eventlistdialog.cpp \
-    deletedialog.cpp
+    deletedialog.cpp \
+    color.cpp
 TRANSLATIONS += QCalendar_zh_CN.ts
 
 RESOURCES += \

@@ -1,5 +1,6 @@
 #include "eventdialog.h"
 #include "deletedialog.h"
+#include "color.h"
 #include "ui_eventdialog.h"
 #include <QtGlobal>
 #include <QRegExp>
@@ -8,13 +9,15 @@
 #include <QDate>
 #include <QMessageBox>
 
+const int Color::MAX_COLOR;
+
 EventDialog::EventDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EventDialog)
 {
     ui->setupUi(this);
-    for (int i = 0; i <= (int)Qt::transparent; ++i) {
-        ui->comboBox_color->addItem(QString::number(i));
+    for (int i = 0; i <= Color::MAX_COLOR; ++i) {
+        ui->comboBox_color->addItem(Color::getName(i));
     }
 
     // title must contain at least 1 non-space character

@@ -6,6 +6,9 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QStandardItemModel>
+#include <QCryptographicHash>
+#include <QByteArray>
+#include <QDateTime>
 
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
@@ -140,21 +143,40 @@ void Calendar::doubleClicked(int x, int y)
         (PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES);
     QStringList dayList = m_monthEventList[selectedDate().day()];
     if (dayList.size() <= maxLine) {
-        if (0 <= index && index < maxLine) {
-            showEventDialog(dayList[index]);
+        if (0 <= index && index < dayList.size()) {
+            return showEventDialog(dayList[index]);
         }
     } else {
         if (0 <= index && index < maxLine - 1) {
-            showEventDialog(dayList[index]);
+            return showEventDialog(dayList[index]);
         } else if (index == maxLine - 1) {
-            showEventList(dayList);
+            return showEventList(dayList);
         }
     }
+
+    // double-click on blank area, create new event
+    return showEventDialog(selectedDate());
 }
 
 void Calendar::showEventDialog(const QString &sha1)
 {
     EventDialog dlg(*(m_dataAdapter->getEvent(sha1)), this);
+    execEventDialog(dlg, sha1);
+}
+
+void Calendar::showEventDialog(const QDate& date)
+{
+    EventDialog dlg(date, this);
+    execEventDialog(dlg);
+}
+
+void Calendar::execEventDialog(EventDialog &dlg, QString sha1)
+{
+    if (sha1.isEmpty()) {
+        sha1 = QString(QCryptographicHash::hash(
+                           (dlg.title() + QString::number(QDateTime::currentMSecsSinceEpoch())).toUtf8(),
+                           QCryptographicHash::Sha1).toHex());
+    }
     if (dlg.exec() == QDialog::Accepted) {
         m_dataAdapter->addOrUpdateEvent(sha1, new CalendarEvent(
                                             dlg.color(),

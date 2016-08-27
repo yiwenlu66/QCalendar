@@ -24,7 +24,7 @@ EventDialog::EventDialog(QWidget *parent) :
     connect(ui->lineEdit_repeatInterval, SIGNAL(textChanged(QString)), this, SLOT(checkInputsLegal()));
 
     ui->lineEdit_repeatCount->setText(QString::number(1));
-    ui->lineEdit_repeatInterval->setText(QString::number(0));
+    ui->lineEdit_repeatInterval->setText(QString::number(1));
     connect(ui->comboBox_repeat, SIGNAL(currentIndexChanged(int)), this, SLOT(repeatModeChanged()));
     repeatModeChanged();
     checkInputsLegal();

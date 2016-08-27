@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QLocale>
 #include "dataadapter.h"
+#include "eventdialog.h"
 
 class Calendar : public QCalendarWidget
 {
@@ -25,7 +26,8 @@ private slots:
     // dirty hack: disable double click action for a very short period of time after month changes to avoid over-sensitive actions
     void freezeDoubleClick();
     void showEventList(const QStringList& sha1List);
-    void showEventDialog(const QString &);
+    void showEventDialog(const QString& sha1);
+    void showEventDialog(const QDate& date);    // new event
 
 protected:
     void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const;
@@ -50,6 +52,8 @@ private:
      * return -1 if the position belongs to a blank area.
      */
     int getTileIndex(int x, int y, int cellWidth, int cellHeight);
+
+    void execEventDialog(EventDialog& dlg, QString sha1 = "");
 
     DataAdapter* m_dataAdapter;
     QList<QStringList> m_monthEventList;

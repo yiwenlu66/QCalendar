@@ -1,10 +1,12 @@
 #include "eventdialog.h"
+#include "deletedialog.h"
 #include "ui_eventdialog.h"
 #include <QtGlobal>
 #include <QRegExp>
 #include <QRegExpValidator>
 #include <QIntValidator>
 #include <QDate>
+#include <QMessageBox>
 
 EventDialog::EventDialog(QWidget *parent) :
     QDialog(parent),
@@ -25,6 +27,8 @@ EventDialog::EventDialog(QWidget *parent) :
     connect(ui->timeEdit_start, SIGNAL(timeChanged(QTime)), this, SLOT(checkStartEndTimeRelationship()));
     connect(ui->timeEdit_end, SIGNAL(timeChanged(QTime)), this, SLOT(checkStartEndTimeRelationship()));
 
+    connect(ui->pushButton_delete, SIGNAL(clicked(bool)), this, SLOT(confirmDelete()));
+
     ui->lineEdit_repeatCount->setText(QString::number(1));
     ui->lineEdit_repeatInterval->setText(QString::number(1));
     connect(ui->comboBox_repeat, SIGNAL(currentIndexChanged(int)), this, SLOT(repeatModeChanged()));
@@ -38,11 +42,17 @@ EventDialog::EventDialog(const QDate &date, QWidget *parent) :
     ui->dateEdit->setDate(date);
     ui->timeEdit_start->setTime(QTime(8, 0));
     ui->timeEdit_end->setTime(QTime(9, 0));
+
+    // new event, delete button not needed
+    ui->pushButton_delete->hide();
 }
 
 EventDialog::EventDialog(const CalendarEvent& event, QWidget *parent) :
     EventDialog(parent)
 {
+    if (event.dates.size() > 1) {
+        deleteMode = MULTI_DELETE;
+    }
     ui->lineEdit_title->setText(event.title);
     ui->dateEdit->setDate(event.dates[0]);
     ui->timeEdit_start->setTime(event.startTime);
@@ -167,6 +177,30 @@ void EventDialog::checkStartEndTimeRelationship()
 {
     if (ui->timeEdit_start->time() > ui->timeEdit_end->time()) {
         ui->timeEdit_end->setTime(ui->timeEdit_start->time());
+    }
+}
+
+void EventDialog::confirmDelete()
+{
+    switch (deleteMode) {
+    case SINGLE_DELETE:
+        if (QMessageBox::warning(this, tr("Warning"), tr("Are you sure to delete this event?"),
+                             QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
+            deleteStatus = DELETE_INSTANCE;
+            accept();
+        }
+        break;
+    case MULTI_DELETE:
+        DeleteDialog dlg(this);
+        if (dlg.exec() == QDialog::Accepted) {
+            if (dlg.deleteSeries()) {
+                deleteStatus = DELETE_SERIES;
+            } else {
+                deleteStatus = DELETE_INSTANCE;
+            }
+            accept();
+        }
+        break;
     }
 }
 

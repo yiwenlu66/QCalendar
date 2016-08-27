@@ -157,16 +157,23 @@ void DataAdapter::deleteSingleEvent(const QString& sha1, const QDate& date)
             }
         }
     }
+    emit updateData();
 }
 
 void DataAdapter::deleteSeries(const QString& sha1)
 {
     if (m_events.contains(sha1)) {
         for (QDate date : m_events.value(sha1)->dates) {
-            m_dates.remove(date);
+            if (m_dates[date].contains(sha1)) {
+                m_dates[date].removeAll(sha1);
+            }
+            if (m_dates[date].isEmpty()) {
+                m_dates.remove(date);
+            }
         }
         m_events.remove(sha1);
     }
+    emit updateData();
 }
 
 QList<QStringList> DataAdapter::getEventsForMonth(int year, int month) const

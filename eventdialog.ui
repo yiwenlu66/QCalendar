@@ -104,7 +104,7 @@
     </spacer>
    </item>
    <item row="8" column="0">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="pushButton_delete">
      <property name="text">
       <string>Delete event</string>
      </property>
@@ -254,7 +254,7 @@
   <zorder>label_12</zorder>
   <zorder>textEdit_comments</zorder>
   <zorder>verticalSpacer</zorder>
-  <zorder>pushButton</zorder>
+  <zorder>pushButton_delete</zorder>
   <zorder></zorder>
  </widget>
  <resources/>

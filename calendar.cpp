@@ -178,14 +178,24 @@ void Calendar::execEventDialog(EventDialog &dlg, QString sha1)
                            QCryptographicHash::Sha1).toHex());
     }
     if (dlg.exec() == QDialog::Accepted) {
-        m_dataAdapter->addOrUpdateEvent(sha1, new CalendarEvent(
-                                            dlg.color(),
-                                            dlg.dates(),
-                                            dlg.startTime(),
-                                            dlg.endTime(),
-                                            dlg.title(),
-                                            dlg.location(),
-                                            dlg.comments()));
+        switch(dlg.deleteStatus) {
+        case EventDialog::DO_NOT_DELETE:
+            m_dataAdapter->addOrUpdateEvent(sha1, new CalendarEvent(
+                                                dlg.color(),
+                                                dlg.dates(),
+                                                dlg.startTime(),
+                                                dlg.endTime(),
+                                                dlg.title(),
+                                                dlg.location(),
+                                                dlg.comments()));
+            break;
+        case EventDialog::DELETE_SERIES:
+            m_dataAdapter->deleteSeries(sha1);
+            break;
+        case EventDialog::DELETE_INSTANCE:
+            m_dataAdapter->deleteSingleEvent(sha1, selectedDate());
+            break;
+        }
     }
 }
 

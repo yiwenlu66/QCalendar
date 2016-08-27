@@ -28,6 +28,12 @@ public:
         CUSTOM_UNEVEN    // with inequal intervals between adjacent events
     };
 
+    enum DeleteStatus {
+        DO_NOT_DELETE,
+        DELETE_INSTANCE,
+        DELETE_SERIES
+    };
+
     explicit EventDialog(QWidget *parent = 0);
     EventDialog(const QDate& date, QWidget *parent = 0);
     EventDialog(const CalendarEvent& event, QWidget *parent = 0);
@@ -40,6 +46,8 @@ public:
     QString location();
     QString comments();
 
+    DeleteStatus deleteStatus = DO_NOT_DELETE;
+
     ~EventDialog();
 
 public slots:
@@ -47,10 +55,17 @@ public slots:
     void repeatModeChanged();
     void checkInputsLegal();
     void checkStartEndTimeRelationship();
+    void confirmDelete();
 
 private:
-    Ui::EventDialog *ui;
+    enum DeleteMode {
+        SINGLE_DELETE,
+        MULTI_DELETE
+    };
     static RepeatMode getRepeatMode(const QList<QDate>&);
+
+    Ui::EventDialog *ui;
+    DeleteMode deleteMode = SINGLE_DELETE;
     void hideRepeatIntervalUi();
     void showRepeatIntervalUi();
     void hideRepeatCountUi();

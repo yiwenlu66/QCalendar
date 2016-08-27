@@ -9,6 +9,9 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QtDebug>
+#if _WIN32
+    #include <windows.h>
+#endif
 
 MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     QMainWindow(parent),
@@ -116,6 +119,11 @@ void MainWindow::setPinWindow(bool pinned)
         setWindowFlags(Qt::FramelessWindowHint);
         show();
         ui->calendarWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
+#if _WIN32
+        HWND hwnd = (HWND) winId();
+        LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
+        SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_TRANSPARENT);
+#endif
     } else {
         setWindowOpacity(1);
         setWindowFlags(0);

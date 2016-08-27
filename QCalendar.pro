@@ -38,3 +38,7 @@ TRANSLATIONS += QCalendar_zh_CN.ts
 
 RESOURCES += \
     res.qrc
+
+win32 {
+    LIBS += user32.lib
+}

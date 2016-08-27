@@ -3,4 +3,8 @@
         <file>QCalendar_zh_CN.qm</file>
         <file>qt_zh_CN.qm</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file>pin.png</file>
+        <file>dnd.png</file>
+    </qresource>
 </RCC>

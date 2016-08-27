@@ -22,6 +22,7 @@ private slots:
     void preferencesTriggered();
     void exportTriggered();
     void importTriggered();
+    void setPinWindow(bool);
 
 signals:
     void doubleClick(int x, int y);

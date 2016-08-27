@@ -43,6 +43,7 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
     connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportTriggered()));
     connect(ui->actionImport, SIGNAL(triggered(bool)), this, SLOT(importTriggered()));
+    connect(ui->actionPin_Window, SIGNAL(triggered(bool)), this, SLOT(setPinWindow(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -104,6 +105,21 @@ void MainWindow::importTriggered()
         file.close();
         ui->calendarWidget->setDataAdapter(m_config->data());
         ui->calendarWidget->setFocus();
+    }
+}
+
+void MainWindow::setPinWindow(bool pinned)
+{
+    if (pinned) {
+        setWindowOpacity(0.6);
+        setWindowFlags(Qt::FramelessWindowHint);
+        show();
+        ui->calendarWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
+    } else {
+        setWindowOpacity(1);
+        setWindowFlags(0);
+        show();
+        ui->calendarWidget->setAttribute(Qt::WA_TransparentForMouseEvents, false);
     }
 }
 

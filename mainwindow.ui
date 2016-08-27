@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>875</width>
-    <height>750</height>
+    <height>775</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -126,6 +126,34 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>12</width>
+     <height>12</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionPin_Window"/>
+   <addaction name="actionDrag_and_Drop"/>
+  </widget>
   <action name="actionFile">
    <property name="text">
     <string>File</string>
@@ -146,6 +174,36 @@
     <string>&amp;Import</string>
    </property>
   </action>
+  <action name="actionPin_Window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/icons/pin.png</normaloff>:/icons/pin.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pin Window</string>
+   </property>
+   <property name="toolTip">
+    <string>Pin Window</string>
+   </property>
+  </action>
+  <action name="actionDrag_and_Drop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/icons/dnd.png</normaloff>:/icons/dnd.png</iconset>
+   </property>
+   <property name="text">
+    <string>Drag and Drop</string>
+   </property>
+   <property name="toolTip">
+    <string>Enable Drag &amp; Drop</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -154,7 +212,9 @@
    <header>calendar.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pushButton_previousMonth</sender>

@@ -168,6 +168,7 @@ void Calendar::showEventDialog(const QString &sha1)
 void Calendar::showEventDialog(const QDate& date)
 {
     EventDialog dlg(date);
+    dlg.setWindowTitle(tr("New event"));
     execEventDialog(dlg);
 }
 

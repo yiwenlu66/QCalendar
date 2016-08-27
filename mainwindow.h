@@ -20,6 +20,7 @@ public slots:
 
 private slots:
     void preferencesTriggered();
+    void exportTriggered();
 
 signals:
     void doubleClick(int x, int y);

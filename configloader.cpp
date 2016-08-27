@@ -21,7 +21,8 @@ ConfigLoader::ConfigLoader(QObject *parent) :
     if (!dataDir.exists()) {
         dataDir.mkpath(dataPath);
     }
-    m_jsonFile = new QFile(dataDir.filePath(FILENAME));
+    m_jsonFilePath = dataDir.filePath(FILENAME);
+    m_jsonFile = new QFile(m_jsonFilePath);
     if (!m_jsonFile->open(QIODevice::ReadWrite)) {
         QMessageBox::critical(0, tr("Error"), tr("Cannot open config file!"));
         QApplication::quit();

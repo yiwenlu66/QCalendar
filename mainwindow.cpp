@@ -5,7 +5,9 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QTableView>
-#include <QtDebug>
+#include <QFileDialog>
+#include <QStandardPaths>
+#include <QDir>
 
 MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     QMainWindow(parent),
@@ -39,6 +41,7 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     connect(this, SIGNAL(resizeCells()), ui->calendarWidget, SLOT(cellsResized()));
 
     connect(ui->actionPreferences, SIGNAL(triggered(bool)), this, SLOT(preferencesTriggered()));
+    connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportTriggered()));
 }
 
 MainWindow::~MainWindow()
@@ -72,6 +75,18 @@ void MainWindow::preferencesTriggered()
     connect(&dlg, SIGNAL(changeStartOfWeek(Qt::DayOfWeek)), ui->calendarWidget, SLOT(startOfWeekChanged(Qt::DayOfWeek)));
     connect(&dlg, SIGNAL(changePreferences()), m_config, SLOT(configChanged()));
     dlg.exec();
+}
+
+void MainWindow::exportTriggered()
+{
+    QString defaultPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+            + QDir::separator() + ConfigLoader::FILENAME;
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
+                                                    defaultPath, tr("Json file (*.json)"));
+    if (QFile::exists(filePath)) {
+        QFile::remove(filePath);
+    }
+    QFile::copy(m_config->path(), filePath);
 }
 
 QString MainWindow::getLongMonthName(int month)

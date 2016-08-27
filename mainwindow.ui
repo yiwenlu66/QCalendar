@@ -120,6 +120,9 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionPreferences"/>
+    <addaction name="separator"/>
+    <addaction name="actionExport"/>
+    <addaction name="actionImport"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -131,6 +134,16 @@
   <action name="actionPreferences">
    <property name="text">
     <string>&amp;Preferences</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>&amp;Export</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>&amp;Import</string>
    </property>
   </action>
  </widget>

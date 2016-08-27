@@ -15,17 +15,20 @@ HEADERS += calendar.h mainwindow.h \
     configloader.h \
     dataadapter.h \
     calendarevent.h \
-    eventdialog.h
+    eventdialog.h \
+    eventlistdialog.h
 FORMS += mainwindow.ui \
     preferencedialog.ui \
-    eventdialog.ui
+    eventdialog.ui \
+    eventlistdialog.ui
 SOURCES += calendar.cpp main.cpp mainwindow.cpp \
     preferencedialog.cpp \
     preferencemanager.cpp \
     configloader.cpp \
     dataadapter.cpp \
     calendarevent.cpp \
-    eventdialog.cpp
+    eventdialog.cpp \
+    eventlistdialog.cpp
 TRANSLATIONS += QCalendar_zh_CN.ts
 
 RESOURCES += \

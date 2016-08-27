@@ -1,8 +1,10 @@
 #include "calendar.h"
+#include "eventlistdialog.h"
 #include <QLocale>
 #include <QFontMetrics>
 #include <QDateTime>
 #include <QTimer>
+#include <QStringListModel>
 
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
@@ -143,8 +145,24 @@ void Calendar::doubleClicked(int x, int y)
         if (0 <= index && index < maxLine - 1) {
             emit showEventDialog(dayList[index]);
         } else if (index == maxLine - 1) {
-            // TODO: show "more" list
+            showEventList(dayList);
         }
+    }
+}
+
+void Calendar::showEventList(const QStringList &sha1List)
+{
+    QStringList titles;
+    for (auto sha1 : sha1List) {
+        titles.append(m_dataAdapter->getEvent(sha1)->title);
+    }
+    QStringListModel model;
+    model.setStringList(titles);
+    EventListDialog dlg;
+    dlg.setModel(model);
+    if (dlg.exec() == QDialog::Accepted) {
+        int index = dlg.getSelectedIndex();
+        emit showEventDialog(sha1List[index]);
     }
 }
 

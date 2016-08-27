@@ -24,6 +24,7 @@ private slots:
 
     // dirty hack: disable double click action for a very short period of time after month changes to avoid over-sensitive actions
     void freezeDoubleClick();
+    void showEventList(const QStringList& sha1List);
 
 signals:
     void showEventDialog(const QString &);

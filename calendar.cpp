@@ -161,13 +161,13 @@ void Calendar::doubleClicked(int x, int y)
 
 void Calendar::showEventDialog(const QString &sha1)
 {
-    EventDialog dlg(*(m_dataAdapter->getEvent(sha1)), this);
+    EventDialog dlg(*(m_dataAdapter->getEvent(sha1)));
     execEventDialog(dlg, sha1);
 }
 
 void Calendar::showEventDialog(const QDate& date)
 {
-    EventDialog dlg(date, this);
+    EventDialog dlg(date);
     execEventDialog(dlg);
 }
 

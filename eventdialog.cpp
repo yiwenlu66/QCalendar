@@ -1,6 +1,9 @@
 #include "eventdialog.h"
 #include "ui_eventdialog.h"
 #include <QtGlobal>
+#include <QRegExp>
+#include <QRegExpValidator>
+#include <QIntValidator>
 
 EventDialog::EventDialog(QWidget *parent) :
     QDialog(parent),
@@ -10,10 +13,20 @@ EventDialog::EventDialog(QWidget *parent) :
     for (int i = 0; i <= (int)Qt::transparent; ++i) {
         ui->comboBox_color->addItem(QString::number(i));
     }
+
+    // title must contain at least 1 non-space character
+    ui->lineEdit_title->setValidator(new QRegExpValidator(*(new QRegExp("^(?!\\s*$).+")), this));
+    ui->lineEdit_repeatCount->setValidator(new QIntValidator(1, 1000, this));
+    ui->lineEdit_repeatInterval->setValidator(new QIntValidator(1, 1000, this));
+    connect(ui->lineEdit_title, SIGNAL(textChanged(QString)), this, SLOT(checkInputsLegal()));
+    connect(ui->lineEdit_repeatCount, SIGNAL(textChanged(QString)), this, SLOT(checkInputsLegal()));
+    connect(ui->lineEdit_repeatInterval, SIGNAL(textChanged(QString)), this, SLOT(checkInputsLegal()));
+
     ui->lineEdit_repeatCount->setText(QString::number(1));
     ui->lineEdit_repeatInterval->setText(QString::number(0));
     connect(ui->comboBox_repeat, SIGNAL(currentIndexChanged(int)), this, SLOT(repeatModeChanged()));
     repeatModeChanged();
+    checkInputsLegal();
 }
 
 EventDialog::EventDialog(const QDate &date, QWidget *parent) :
@@ -64,6 +77,7 @@ EventDialog::EventDialog(const CalendarEvent& event, QWidget *parent) :
     ui->lineEdit_repeatInterval->setText(QString::number(repeatInterval));
     ui->lineEdit_repeatCount->setText(QString::number(repeatCount));
     repeatModeSet();
+    checkInputsLegal();
 }
 
 void EventDialog::repeatModeSet()
@@ -72,6 +86,7 @@ void EventDialog::repeatModeSet()
         showRepeatIntervalUi();
     } else {
         hideRepeatIntervalUi();
+        ui->lineEdit_repeatInterval->setText(QString::number(1));
     }
 
     if (ui->lineEdit_repeatCount->text().toInt() >= 2) {
@@ -86,6 +101,7 @@ void EventDialog::repeatModeChanged()
     switch (ui->comboBox_repeat->currentIndex()) {
     case 0:
         // once
+        ui->lineEdit_repeatCount->setText(QString::number(1));
         hideRepeatIntervalUi();
         hideRepeatCountUi();
         break;
@@ -131,6 +147,17 @@ void EventDialog::showRepeatCountUi()
     ui->label_repeatCount_1->show();
     ui->label_repeatCount_2->show();
     ui->lineEdit_repeatCount->show();
+}
+
+void EventDialog::checkInputsLegal()
+{
+    if (ui->lineEdit_title->hasAcceptableInput() &&
+            ui->lineEdit_repeatCount->hasAcceptableInput() &&
+            ui->lineEdit_repeatInterval->hasAcceptableInput()) {
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    } else {
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    }
 }
 
 

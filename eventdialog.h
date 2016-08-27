@@ -36,6 +36,7 @@ public:
 public slots:
     void repeatModeSet();
     void repeatModeChanged();
+    void checkInputsLegal();
 
 private:
     Ui::EventDialog *ui;

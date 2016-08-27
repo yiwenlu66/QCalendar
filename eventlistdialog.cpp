@@ -13,6 +13,7 @@ void EventListDialog::setModel(QStringListModel &model)
 {
     ui->listView->setModel(&model);
     ui->listView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 int EventListDialog::getSelectedIndex()

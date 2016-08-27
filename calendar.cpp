@@ -5,7 +5,7 @@
 #include <QFontMetrics>
 #include <QDateTime>
 #include <QTimer>
-#include <QStringListModel>
+#include <QStandardItemModel>
 
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
@@ -159,12 +159,15 @@ void Calendar::showEventDialog(const QString &sha1)
 
 void Calendar::showEventList(const QStringList &sha1List)
 {
-    QStringList titles;
-    for (auto sha1 : sha1List) {
-        titles.append(m_dataAdapter->getEvent(sha1)->title);
+    QStandardItemModel model(sha1List.size(), 1);
+    for (int i = 0; i < sha1List.size(); ++i) {
+        QStandardItem* item = new QStandardItem(
+                    QString("%1,%2")
+                    .arg(m_dataAdapter->getEvent(sha1List[i])->title)
+                    .arg((int)m_dataAdapter->getEvent(sha1List[i])->color));
+        model.setItem(i, 0, item);
     }
-    QStringListModel model;
-    model.setStringList(titles);
+
     EventListDialog dlg;
     dlg.setModel(model);
     if (dlg.exec() == QDialog::Accepted) {

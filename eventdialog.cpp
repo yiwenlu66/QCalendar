@@ -22,6 +22,8 @@ EventDialog::EventDialog(QWidget *parent) :
     connect(ui->lineEdit_title, SIGNAL(textChanged(QString)), this, SLOT(checkInputsLegal()));
     connect(ui->lineEdit_repeatCount, SIGNAL(textChanged(QString)), this, SLOT(checkInputsLegal()));
     connect(ui->lineEdit_repeatInterval, SIGNAL(textChanged(QString)), this, SLOT(checkInputsLegal()));
+    connect(ui->timeEdit_start, SIGNAL(timeChanged(QTime)), this, SLOT(checkStartEndTimeRelationship()));
+    connect(ui->timeEdit_end, SIGNAL(timeChanged(QTime)), this, SLOT(checkStartEndTimeRelationship()));
 
     ui->lineEdit_repeatCount->setText(QString::number(1));
     ui->lineEdit_repeatInterval->setText(QString::number(1));
@@ -158,6 +160,13 @@ void EventDialog::checkInputsLegal()
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     } else {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    }
+}
+
+void EventDialog::checkStartEndTimeRelationship()
+{
+    if (ui->timeEdit_start->time() > ui->timeEdit_end->time()) {
+        ui->timeEdit_end->setTime(ui->timeEdit_start->time());
     }
 }
 

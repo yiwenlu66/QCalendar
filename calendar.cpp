@@ -13,7 +13,7 @@
 
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
-const char Calendar::COLOR_TODAY[];
+constexpr char const Calendar::COLOR_TODAY[];
 const int Calendar::MARGIN_BELOW_DAY;
 const int Calendar::MARGIN_BETWEEN_TILES;
 const int Calendar::MARGIN_TILE_SIDE;

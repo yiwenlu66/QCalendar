@@ -42,7 +42,7 @@ private:
     static const int PADDING_BOTTOM = 2;
     static const int PADDING_LEFT = 2;
     static const int PADDING_RIGHT = 2;
-    static constexpr char COLOR_TODAY[] = "#FFF8DC";
+    static constexpr char const COLOR_TODAY[] = "#FFF8DC";
     static const int FREEZE_PERIOD = 500;
     bool doubleClickFreezed = false;
     mutable QList<int> xPivots, yPivots, cellWidths, cellHeights;    // record starting coordinates and metrics of all cells

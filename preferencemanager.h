@@ -17,8 +17,8 @@ public:
     QJsonObject toJson();
 
 private:
-    static constexpr char KEY_LANG[] = "language";
-    static constexpr char KEY_STARTOFWEEK[] = "startOfWeek";
+    static constexpr char const KEY_LANG[] = "language";
+    static constexpr char const KEY_STARTOFWEEK[] = "startOfWeek";
 
     static Language getDefaultLanguage();
 };

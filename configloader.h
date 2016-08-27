@@ -10,7 +10,7 @@ class ConfigLoader : public QObject
 {
     Q_OBJECT
 public:
-    static constexpr char FILENAME[] = "config.json";	// TODO: support multiple users
+    static constexpr char const FILENAME[] = "config.json";	// TODO: support multiple users
     explicit ConfigLoader(QObject *parent = 0);
     PreferenceManager* pref() {
         return m_pref;
@@ -29,7 +29,7 @@ public slots:
     void configChanged();
 
 private:
-    static constexpr char KEY_PREF[] = "preferences";
+    static constexpr char const KEY_PREF[] = "preferences";
 
     PreferenceManager* m_pref;
     DataAdapter* m_data;

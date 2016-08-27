@@ -104,6 +104,7 @@ void Calendar::loadMonthEventList()
 void Calendar::setDataAdapter(DataAdapter *dataAdapter)
 {
     m_dataAdapter = dataAdapter;
+    connect(m_dataAdapter, SIGNAL(updateData()), this, SLOT(loadMonthEventList()));
     loadMonthEventList();
 }
 
@@ -154,7 +155,16 @@ void Calendar::doubleClicked(int x, int y)
 void Calendar::showEventDialog(const QString &sha1)
 {
     EventDialog dlg(*(m_dataAdapter->getEvent(sha1)), this);
-    dlg.exec();
+    if (dlg.exec() == QDialog::Accepted) {
+        m_dataAdapter->addOrUpdateEvent(sha1, new CalendarEvent(
+                                            dlg.color(),
+                                            dlg.dates(),
+                                            dlg.startTime(),
+                                            dlg.endTime(),
+                                            dlg.title(),
+                                            dlg.location(),
+                                            dlg.comments()));
+    }
 }
 
 void Calendar::showEventList(const QStringList &sha1List)

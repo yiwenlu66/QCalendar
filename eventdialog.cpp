@@ -4,6 +4,7 @@
 #include <QRegExp>
 #include <QRegExpValidator>
 #include <QIntValidator>
+#include <QDate>
 
 EventDialog::EventDialog(QWidget *parent) :
     QDialog(parent),
@@ -158,6 +159,84 @@ void EventDialog::checkInputsLegal()
     } else {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
+}
+
+QString EventDialog::title()
+{
+    return ui->lineEdit_title->text();
+}
+
+QList<QDate> EventDialog::dates()
+{
+    QList<QDate> result;
+    QDate date = ui->dateEdit->date();
+    switch (ui->comboBox_repeat->currentIndex()) {
+    case 0:
+        // once
+        result.append(date);
+        break;
+    case 1:
+        // daily
+        for (int i = 0; i < ui->lineEdit_repeatCount->text().toInt(); ++i) {
+            result.append(date);
+            date = date.addDays(1);
+        }
+        break;
+    case 2:
+        // weekly
+        for (int i = 0; i < ui->lineEdit_repeatCount->text().toInt(); ++i) {
+            result.append(date);
+            date = date.addDays(7);
+        }
+        break;
+    case 3:
+        // monthly
+        for (int i = 0; i < ui->lineEdit_repeatCount->text().toInt(); ++i) {
+            result.append(date);
+            date = date.addMonths(1);
+        }
+        break;
+    case 4:
+        // yearly
+        for (int i = 0; i < ui->lineEdit_repeatCount->text().toInt(); ++i) {
+            result.append(date);
+            date = date.addYears(1);
+        }
+        break;
+    case 5:
+        // custom
+        for (int i = 0; i < ui->lineEdit_repeatCount->text().toInt(); ++i) {
+            result.append(date);
+            date = date.addDays(ui->lineEdit_repeatInterval->text().toInt());
+        }
+        break;
+    }
+    return result;
+}
+
+QTime EventDialog::startTime()
+{
+    return ui->timeEdit_start->time();
+}
+
+QTime EventDialog::endTime()
+{
+    return ui->timeEdit_end->time();
+}
+
+Qt::GlobalColor EventDialog::color()
+{
+    return (Qt::GlobalColor)ui->comboBox_color->currentIndex();
+}
+
+QString EventDialog::location()
+{
+    return ui->lineEdit_location->text();
+}
+
+QString EventDialog::comments()
+{
+    return ui->textEdit_comments->toPlainText();
 }
 
 

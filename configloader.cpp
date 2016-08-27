@@ -48,6 +48,7 @@ ConfigLoader::ConfigLoader(QObject *parent) :
     if (m_data == nullptr) {
         m_data = new DataAdapter;
     }
+    connect(m_data, SIGNAL(updateData()), this, SLOT(configChanged()));
 }
 
 void ConfigLoader::configChanged()

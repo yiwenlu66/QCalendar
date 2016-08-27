@@ -118,7 +118,27 @@ const CalendarEvent* DataAdapter::getEvent(const QString &sha1) const
 
 void DataAdapter::addOrUpdateEvent(const QString& sha1, CalendarEvent* event)
 {
+    if (m_events.contains(sha1)) {
+        const CalendarEvent* oldEvent = m_events.value(sha1);
+        for (auto date : oldEvent->dates) {
+            if (m_dates.contains(date)) {
+                m_dates[date].removeAll(sha1);
+            }
+        }
+    }
     m_events.insert(sha1, event);
+    for (auto date : event->dates) {
+        if (m_dates.contains(date)) {
+            if (!m_dates[date].contains(sha1)) {
+                m_dates[date].append(sha1);
+            }
+        } else {
+            QStringList* dayList = new QStringList;
+            dayList->append(sha1);
+            m_dates.insert(date, *dayList);
+        }
+    }
+    emit updateData();
 }
 
 void DataAdapter::deleteSingleEvent(const QString& sha1, const QDate& date)

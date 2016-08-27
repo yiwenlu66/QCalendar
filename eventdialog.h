@@ -31,6 +31,15 @@ public:
     explicit EventDialog(QWidget *parent = 0);
     EventDialog(const QDate& date, QWidget *parent = 0);
     EventDialog(const CalendarEvent& event, QWidget *parent = 0);
+
+    QString title();
+    QList<QDate> dates();
+    QTime startTime();
+    QTime endTime();
+    Qt::GlobalColor color();
+    QString location();
+    QString comments();
+
     ~EventDialog();
 
 public slots:

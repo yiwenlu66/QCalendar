@@ -2,13 +2,17 @@
 #define DATAADAPTER_H
 
 #include "calendarevent.h"
+#include <QObject>
 #include <QList>
 #include <QJsonObject>
 #include <QHash>
 #include <QMap>
 
-class DataAdapter
+class DataAdapter : public QObject
 {
+
+    Q_OBJECT
+
 public:
     enum ItemType {
         EVENT,
@@ -26,6 +30,9 @@ public:
     QList<QStringList> getEventsForMonth(int year, int month) const;
     QJsonObject toJson() const;
     ~DataAdapter();
+
+signals:
+    void updateData();
 
 private:
     static constexpr char KEY_ITEM_TYPE[] = "type";

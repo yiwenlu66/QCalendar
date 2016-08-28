@@ -4,13 +4,16 @@
 #include <QColor>
 #include <QString>
 #include <QIcon>
+#include <QObject>
 
-class Color
+class Color: public QObject
 {
+    Q_OBJECT
+
 public:
-    Color();
+    Color(QObject* parent = 0);
     static QColor getColor(int);
-    static QString getName(int);
+    QString getName(int);
     static QIcon getIcon(int i, int size = 12);
     const static int MAX_COLOR = 6;
 };

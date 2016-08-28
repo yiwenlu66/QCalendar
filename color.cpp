@@ -1,7 +1,8 @@
 #include "color.h"
 #include <QPixmap>
 
-Color::Color()
+Color::Color(QObject* parent) :
+    QObject(parent)
 {
 
 }
@@ -32,21 +33,21 @@ QString Color::getName(int i)
 {
     switch(i) {
     case 0:
-        return "Purple";
+        return tr("Purple");
     case 1:
-        return "Green";
+        return tr("Green");
     case 2:
-        return "Orange";
+        return tr("Orange");
     case 3:
-        return "Yellow";
+        return tr("Yellow");
     case 4:
-        return "Red";
+        return tr("Red");
     case 5:
-        return "Blue";
+        return tr("Blue");
     case 6:
-        return "Gray";
+        return tr("Gray");
     default:
-        return "White";
+        return tr("White");
     }
 }
 

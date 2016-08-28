@@ -16,8 +16,11 @@ EventDialog::EventDialog(QWidget *parent) :
     ui(new Ui::EventDialog)
 {
     ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+    Color colorObject(this);
     for (int i = 0; i <= Color::MAX_COLOR; ++i) {
-        ui->comboBox_color->addItem(Color::getIcon(i), Color::getName(i));
+        ui->comboBox_color->addItem(Color::getIcon(i), colorObject.getName(i));
     }
 
     // title must contain at least 1 non-space character

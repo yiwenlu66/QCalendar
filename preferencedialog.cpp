@@ -1,6 +1,7 @@
 #include "preferencedialog.h"
 #include "ui_preferencedialog.h"
 #include <QtDebug>
+#include <QPushButton>
 
 PreferenceDialog::PreferenceDialog(PreferenceManager* pref, QWidget *parent) :
     QDialog(parent),
@@ -8,6 +9,8 @@ PreferenceDialog::PreferenceDialog(PreferenceManager* pref, QWidget *parent) :
     m_pref(pref)
 {
     ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     ui->comboBox_language->setCurrentIndex(pref->language);
     ui->comboBox_startOfWeek->setCurrentIndex(pref->startOfWeek - Qt::Monday);
 }

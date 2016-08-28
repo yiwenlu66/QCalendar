@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QFont>
 #include <QFontMetrics>
+#include <QPushButton>
 
 const int ColoredItemDelegate::FONT_SIZE;
 const int ColoredItemDelegate::PADDING_TOP;
@@ -19,6 +20,8 @@ EventListDialog::EventListDialog(QWidget *parent) :
     ui(new Ui::EventListDialog)
 {
     ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 }
 
 void EventListDialog::setModel(QStandardItemModel &model)

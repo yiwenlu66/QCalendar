@@ -20,9 +20,12 @@ FileDetailDialog::FileDetailDialog(const QString &sha1, const QString &filename,
     filename(filename)
 {
     ui->setupUi(this);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     ui->label_filename->setText(filename);
+    Color colorObject(this);
     for (int i = 0; i <= Color::MAX_COLOR; ++i) {
-        ui->comboBox->addItem(Color::getIcon(i), Color::getName(i));
+        ui->comboBox->addItem(Color::getIcon(i), colorObject.getName(i));
     }
     ui->comboBox->setCurrentIndex(color);
     ui->label_icon->setPixmap(QPixmap(":/icons/file.png"));

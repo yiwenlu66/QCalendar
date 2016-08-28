@@ -14,7 +14,12 @@ class FileDetailDialog : public QDialog
 
 public:
     explicit FileDetailDialog(const QString& sha1, const QString& filename, int color, QWidget *parent = 0);
+    bool toDelete = false;
+    int color();
     ~FileDetailDialog();
+
+public slots:
+    void confirmDelete();
 
 protected:
     bool eventFilter(QObject *, QEvent *);

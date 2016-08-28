@@ -11,6 +11,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QDateTime>
+#include <QMessageBox>
 
 FileDetailDialog::FileDetailDialog(const QString &sha1, const QString &filename, int color, QWidget *parent) :
     QDialog(parent),
@@ -27,6 +28,13 @@ FileDetailDialog::FileDetailDialog(const QString &sha1, const QString &filename,
     ui->label_icon->setPixmap(QPixmap(":/icons/file.png"));
     ui->label_filename->setText(filename);
     ui->label_icon->installEventFilter(this);
+
+    connect(ui->pushButton_delete, SIGNAL(clicked(bool)), this, SLOT(confirmDelete()));
+}
+
+int FileDetailDialog::color()
+{
+    return ui->comboBox->currentIndex();
 }
 
 bool FileDetailDialog::eventFilter(QObject *watched, QEvent *event)
@@ -59,6 +67,15 @@ bool FileDetailDialog::eventFilter(QObject *watched, QEvent *event)
         drag->setMimeData(mime);
         drag->exec(Qt::CopyAction, Qt::CopyAction);
         return true;
+    }
+}
+
+void FileDetailDialog::confirmDelete()
+{
+    if (QMessageBox::warning(this, tr("Warning"), tr("Are you sure to delete?"), QMessageBox::Ok, QMessageBox::Cancel)
+            == QMessageBox::Ok) {
+        toDelete = true;
+        accept();
     }
 }
 

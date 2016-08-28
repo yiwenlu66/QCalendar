@@ -1,6 +1,9 @@
 #include "dataadapter.h"
 #include <QJsonArray>
 #include <algorithm>
+#include <QFile>
+#include <QStandardPaths>
+#include <QDir>
 
 constexpr char DataAdapter::KEY_EVENTS[];
 constexpr char DataAdapter::KEY_FILES[];
@@ -247,6 +250,7 @@ void DataAdapter::deleteFile(const QString &itemSha1)
 {
     if (m_files.contains(itemSha1)) {
         QDate date = m_files.value(itemSha1)->date;
+        QString contentSha1 = m_files.value(itemSha1)->contentSha1;
         if (m_dates[date].second.contains(itemSha1)) {
             m_dates[date].second.removeAll(itemSha1);
         }
@@ -254,6 +258,20 @@ void DataAdapter::deleteFile(const QString &itemSha1)
             m_dates.remove(date);
         }
         m_files.remove(itemSha1);
+
+        // garbage-collect disk file
+        bool hasReference = false;
+        for (auto file : m_files) {
+            if (file->contentSha1 == contentSha1) {
+                hasReference = true;
+                break;
+            }
+        }
+        if (!hasReference) {
+            QString filePath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)
+                    + QDir::separator() + "files" + QDir::separator() + contentSha1;
+            QFile::remove(filePath);
+        }
     }
     emit updateData();
 }

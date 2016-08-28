@@ -197,7 +197,13 @@ void Calendar::showFileDetailDialog(const QString &itemSha1)
 {
     const CalendarFile* file = m_dataAdapter->getFile(itemSha1);
     FileDetailDialog dlg(file->contentSha1, file->title, file->color, this);
-    dlg.exec();
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.toDelete) {
+            m_dataAdapter->deleteFile(itemSha1);
+        } else {
+            m_dataAdapter->changeFileColor(itemSha1, dlg.color());
+        }
+    }
 }
 
 void Calendar::showEventDialog(const QDate& date)

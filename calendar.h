@@ -24,7 +24,7 @@ public slots:
     void cellsResized();
 
 private slots:
-    void loadMonthEventList();
+    void loadMonthLists();
 
     // dirty hack: disable double click action for a very short period of time after month changes to avoid over-sensitive actions
     void freezeDoubleClick();
@@ -63,6 +63,7 @@ private:
 
     DataAdapter* m_dataAdapter;
     QList<QStringList> m_monthEventList;
+    QList<QStringList> m_monthFileList;
 };
 
 #endif // CALENDAR_H

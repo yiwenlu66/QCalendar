@@ -36,7 +36,7 @@ Calendar::Calendar(QWidget* parent):
     setGridVisible(true);
     setStyleSheet("selection-background-color: white");
     setNavigationBarVisible(false);
-    connect(this, SIGNAL(currentPageChanged(int,int)), this, SLOT(loadMonthEventList()));
+    connect(this, SIGNAL(currentPageChanged(int,int)), this, SLOT(loadMonthLists()));
     connect(this, SIGNAL(currentPageChanged(int,int)), this, SLOT(freezeDoubleClick()));
 }
 
@@ -67,13 +67,15 @@ void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & d
     QFont itemTitleFont = QFont("Sans", FONTSIZE_ITEMTITLE);
     QFontMetrics itemTitleMetrics(itemTitleFont);
     painter->setFont(itemTitleFont);
-    if (date.month() == monthShown() && !m_monthEventList[date.day()].isEmpty()) {
+    auto dayFileList = m_monthFileList[date.day()];
+    auto dayEventList = m_monthEventList[date.day()];
+    auto dayList = dayFileList + dayEventList;
+    if (date.month() == monthShown() && !dayList.isEmpty()) {
         int maxLine = (rect.height() - FONTSIZE_DAYOFMONTH - MARGIN_BELOW_DAY) /
                 (PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES);
         painter->save();
         painter->translate(rect.x(), rect.y());
         painter->translate(MARGIN_TILE_SIDE, FONTSIZE_DAYOFMONTH + MARGIN_BELOW_DAY);
-        auto dayList = m_monthEventList[date.day()];
         for (int i = 0; i < dayList.size(); ++i) {
             if (i == maxLine - 1 && i < dayList.size() - 1) {
                 painter->setPen(Qt::gray);
@@ -82,15 +84,25 @@ void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & d
                 break;
             }
             QString sha1 = dayList[i];
-            const CalendarEvent* event = m_dataAdapter->getEvent(sha1);
+            int color;
+            QString title;
+            if (i < dayFileList.size()) {
+                const CalendarFile* file = m_dataAdapter->getFile(sha1);
+                color = file->color;
+                title = file->title;
+            } else {
+                const CalendarEvent* event = m_dataAdapter->getEvent(sha1);
+                color = event->color;
+                title = event->title;
+            }
             painter->setPen(Qt::NoPen);
-            painter->setBrush(Color::getColor(event->color));
+            painter->setBrush(Color::getColor(color));
             painter->drawRect(0, 0, rect.width() - 2 * MARGIN_TILE_SIDE,
                               PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM);
             painter->save();
             painter->translate(PADDING_LEFT, PADDING_TOP + FONTSIZE_ITEMTITLE);
             painter->setPen(Qt::black);
-            QString elidedTitle = itemTitleMetrics.elidedText(event->title, Qt::ElideRight,
+            QString elidedTitle = itemTitleMetrics.elidedText(title, Qt::ElideRight,
                                                               rect.width() - PADDING_LEFT - PADDING_RIGHT - 2 * MARGIN_TILE_SIDE);
             painter->drawText(0, 0, elidedTitle);
             painter->restore();
@@ -105,17 +117,18 @@ void Calendar::startOfWeekChanged(Qt::DayOfWeek day)
     setFirstDayOfWeek(day);
 }
 
-void Calendar::loadMonthEventList()
+void Calendar::loadMonthLists()
 {
     m_monthEventList = m_dataAdapter->getEventsForMonth(yearShown(), monthShown());
+    m_monthFileList = m_dataAdapter->getFilesForMonth(yearShown(), monthShown());
     update();
 }
 
 void Calendar::setDataAdapter(DataAdapter *dataAdapter)
 {
     m_dataAdapter = dataAdapter;
-    connect(m_dataAdapter, SIGNAL(updateData()), this, SLOT(loadMonthEventList()));
-    loadMonthEventList();
+    connect(m_dataAdapter, SIGNAL(updateData()), this, SLOT(loadMonthLists()));
+    loadMonthLists();
 }
 
 void Calendar::freezeDoubleClick()
@@ -288,6 +301,8 @@ void Calendar::drop(QDropEvent *e)
         }
         m_dataAdapter->addFile(itemSha1, new CalendarFile(color, date, title, contentSha1));
     }
+
+    setFocus();
 }
 
 bool Calendar::importFile(const QString &srcPath, const QString &sha1)

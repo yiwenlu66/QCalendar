@@ -6,5 +6,6 @@
     <qresource prefix="/icons">
         <file>pin.png</file>
         <file>dnd.png</file>
+        <file>file.png</file>
     </qresource>
 </RCC>

@@ -31,6 +31,7 @@ private slots:
     void showEventList(const QStringList& sha1List);
     void showEventDialog(const QString& sha1);
     void showEventDialog(const QDate& date);    // new event
+    void showFileDetailDialog(const QString& itemSha1);
 
 protected:
     void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const;

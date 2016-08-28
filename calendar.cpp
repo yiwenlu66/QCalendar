@@ -1,5 +1,6 @@
 #include "calendar.h"
 #include "eventdialog.h"
+#include "filedetaildialog.h"
 #include "eventlistdialog.h"
 #include "color.h"
 #include <QLocale>
@@ -161,13 +162,21 @@ void Calendar::doubleClicked(int x, int y)
     int index = getTileIndex(xInCell, yInCell, cellWidth, cellHeight);
     int maxLine = (cellHeight - FONTSIZE_DAYOFMONTH - MARGIN_BELOW_DAY) /
         (PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES);
-    QStringList dayList = m_monthEventList[selectedDate().day()];
+    QStringList fileList = m_monthFileList[selectedDate().day()];
+    QStringList eventList = m_monthEventList[selectedDate().day()];
+    QStringList dayList = fileList + eventList;
     if (dayList.size() <= maxLine) {
         if (0 <= index && index < dayList.size()) {
+            if (index < fileList.size()) {
+                return showFileDetailDialog(dayList[index]);
+            }
             return showEventDialog(dayList[index]);
         }
     } else {
         if (0 <= index && index < maxLine - 1) {
+            if (index < fileList.size()) {
+                return showFileDetailDialog(dayList[index]);
+            }
             return showEventDialog(dayList[index]);
         } else if (index == maxLine - 1) {
             return showEventList(dayList);
@@ -182,6 +191,13 @@ void Calendar::showEventDialog(const QString &sha1)
 {
     EventDialog dlg(*(m_dataAdapter->getEvent(sha1)));
     execEventDialog(dlg, sha1);
+}
+
+void Calendar::showFileDetailDialog(const QString &itemSha1)
+{
+    const CalendarFile* file = m_dataAdapter->getFile(itemSha1);
+    FileDetailDialog dlg(file->contentSha1, file->title, file->color, this);
+    dlg.exec();
 }
 
 void Calendar::showEventDialog(const QDate& date)

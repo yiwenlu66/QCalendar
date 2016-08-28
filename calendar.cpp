@@ -68,10 +68,13 @@ void Calendar::paintCell(QPainter * painter, const QRect & rect, const QDate & d
     QFont itemTitleFont = QFont("Sans", FONTSIZE_ITEMTITLE);
     QFontMetrics itemTitleMetrics(itemTitleFont);
     painter->setFont(itemTitleFont);
+    if (date.month() != monthShown()) {
+        return;
+    }
     auto dayFileList = m_monthFileList[date.day()];
     auto dayEventList = m_monthEventList[date.day()];
     auto dayList = dayFileList + dayEventList;
-    if (date.month() == monthShown() && !dayList.isEmpty()) {
+    if (!dayList.isEmpty()) {
         int maxLine = (rect.height() - FONTSIZE_DAYOFMONTH - MARGIN_BELOW_DAY) /
                 (PADDING_TOP + FONTSIZE_ITEMTITLE + PADDING_BOTTOM + MARGIN_BETWEEN_TILES);
         painter->save();

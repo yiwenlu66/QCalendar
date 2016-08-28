@@ -179,7 +179,7 @@ void Calendar::doubleClicked(int x, int y)
             }
             return showEventDialog(dayList[index]);
         } else if (index == maxLine - 1) {
-            return showEventList(dayList);
+            return showItemList(dayList, fileList.size());
         }
     }
 
@@ -236,14 +236,20 @@ void Calendar::execEventDialog(EventDialog &dlg, QString sha1)
     }
 }
 
-void Calendar::showEventList(const QStringList &sha1List)
+void Calendar::showItemList(const QStringList &sha1List, int numFiles)
 {
     QStandardItemModel model(sha1List.size(), 1);
     for (int i = 0; i < sha1List.size(); ++i) {
-        QStandardItem* item = new QStandardItem(
-                    QString("%1,%2")
-                    .arg(m_dataAdapter->getEvent(sha1List[i])->title)
-                    .arg((int)m_dataAdapter->getEvent(sha1List[i])->color));
+        QString title;
+        int color;
+        if (i < numFiles) {
+            title = m_dataAdapter->getFile(sha1List[i])->title;
+            color = m_dataAdapter->getFile(sha1List[i])->color;
+        } else {
+            title = m_dataAdapter->getEvent(sha1List[i])->title;
+            color = m_dataAdapter->getEvent(sha1List[i])->color;
+        }
+        QStandardItem* item = new QStandardItem(QString("%1,%2").arg(title).arg(color));
         model.setItem(i, 0, item);
     }
 
@@ -251,7 +257,11 @@ void Calendar::showEventList(const QStringList &sha1List)
     dlg.setModel(model);
     if (dlg.exec() == QDialog::Accepted) {
         int index = dlg.getSelectedIndex();
-        emit showEventDialog(sha1List[index]);
+        if (index < numFiles) {
+            emit showFileDetailDialog(sha1List[index]);
+        } else {
+            emit showEventDialog(sha1List[index]);
+        }
     }
 }
 

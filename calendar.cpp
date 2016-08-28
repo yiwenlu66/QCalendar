@@ -342,7 +342,9 @@ QDate Calendar::getDateByPosition(const QPoint &pos)
     }
     int index = 7 * yIndex + xIndex;
     QDate baseDay(yearShown(), monthShown(), 1);
-    int baseIndex = (baseDay.dayOfWeek() == (int)firstDayOfWeek()) ?
-                baseDay.dayOfWeek() + 6 : baseDay.dayOfWeek() - 1;
+    int baseIndex = baseDay.dayOfWeek() - (int)firstDayOfWeek();
+    if (baseIndex < 0) {
+        baseIndex += 7;
+    }
     return baseDay.addDays(index - baseIndex);
 }

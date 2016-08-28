@@ -1,6 +1,5 @@
 #include "preferencedialog.h"
 #include "ui_preferencedialog.h"
-#include <QtDebug>
 #include <QPushButton>
 
 PreferenceDialog::PreferenceDialog(PreferenceManager* pref, QWidget *parent) :

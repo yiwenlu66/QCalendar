@@ -1,6 +1,5 @@
 #include "configloader.h"
 #include <QApplication>
-#include <QtDebug>
 #include <QJsonDocument>
 #include <QStandardPaths>
 #include <QDir>

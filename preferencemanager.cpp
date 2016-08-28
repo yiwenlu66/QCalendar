@@ -1,6 +1,5 @@
 #include "preferencemanager.h"
 #include <QLocale>
-#include <QtDebug>
 
 constexpr char PreferenceManager::KEY_LANG[];
 constexpr char PreferenceManager::KEY_STARTOFWEEK[];

@@ -1,6 +1,5 @@
 #include <QApplication>
 #include <QTranslator>
-#include <QtDebug>
 #include "mainwindow.h"
 #include "configloader.h"
 

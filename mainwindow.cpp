@@ -8,7 +8,9 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QDir>
-#include <QtDebug>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #if _WIN32
     #include <windows.h>
 #endif
@@ -34,8 +36,9 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
         break;
     }
 
-    QTableView* tableView = ui->calendarWidget->findChild<QTableView*>("qt_calendar_calendarview");
-    tableView->installEventFilter(this);
+    m_tableView = ui->calendarWidget->findChild<QTableView*>("qt_calendar_calendarview");
+    m_tableView->installEventFilter(this);
+    ui->calendarWidget->installEventFilter(this);
     ui->calendarWidget->setDataAdapter(config->data());
     ui->calendarWidget->setFirstDayOfWeek(config->pref()->startOfWeek);
 
@@ -48,6 +51,11 @@ MainWindow::MainWindow(ConfigLoader* config, QWidget *parent) :
     connect(ui->actionExport, SIGNAL(triggered(bool)), this, SLOT(exportTriggered()));
     connect(ui->actionImport, SIGNAL(triggered(bool)), this, SLOT(importTriggered()));
     connect(ui->actionPin_Window, SIGNAL(triggered(bool)), this, SLOT(setPinWindow(bool)));
+    connect(ui->actionDrag_and_Drop, SIGNAL(triggered(bool)), this, SLOT(toggleDrop(bool)));
+
+    ui->calendarWidget->setAcceptDrops(false);
+    m_tableView->setAcceptDrops(false);
+    setAcceptDrops(false);
 }
 
 MainWindow::~MainWindow()
@@ -132,6 +140,13 @@ void MainWindow::setPinWindow(bool pinned)
     }
 }
 
+void MainWindow::toggleDrop(bool b)
+{
+    ui->calendarWidget->setAcceptDrops(b);
+    m_tableView->setAcceptDrops(b);
+    setAcceptDrops(b);
+}
+
 QString MainWindow::getLongMonthName(int month)
 {
     switch (month) {
@@ -164,8 +179,23 @@ QString MainWindow::getLongMonthName(int month)
     }
 }
 
-bool MainWindow::eventFilter(QObject *, QEvent *event)
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == ui->calendarWidget) {
+        // drag&drop events
+        if (event->type() == QEvent::DragEnter) {
+            QDragEnterEvent* enterEvent = static_cast<QDragEnterEvent*>(event);
+            enterEvent->acceptProposedAction();
+        } else if (event->type() == QEvent::DragMove) {
+            QDragMoveEvent* moveEvent = static_cast<QDragMoveEvent*>(event);
+            moveEvent->acceptProposedAction();
+        } else if (event->type() == QEvent::Drop) {
+            QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
+            ui->calendarWidget->drop(dropEvent);
+        }
+        return false;
+    }
+
     // dirty hack: the first click will be captured by QCalendarWidget, so MouseButtonRelease indicates a double click
     if (event->type() == QEvent::MouseButtonRelease) {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);

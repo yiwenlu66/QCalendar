@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QLocale>
 #include <QKeyEvent>
+#include <QTableView>
 #include "configloader.h"
 
 namespace Ui {
@@ -24,6 +25,7 @@ private slots:
     void exportTriggered();
     void importTriggered();
     void setPinWindow(bool);
+    void toggleDrop(bool);
 
 signals:
     void doubleClick(int x, int y);
@@ -37,6 +39,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QTableView* m_tableView;
 
     QTranslator* m_appTranslator;
     QTranslator* m_qtTranslator;

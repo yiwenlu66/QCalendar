@@ -10,6 +10,12 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 #include <QDateTime>
+#include <QMimeData>
+#include <QUrl>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QStandardPaths>
+#include <QDir>
 
 const int Calendar::FONTSIZE_DAYOFMONTH;
 const int Calendar::FONTSIZE_ITEMTITLE;
@@ -241,4 +247,87 @@ int Calendar::getTileIndex(int x, int y, int cellWidth, int cellHeight)
         }
     }
     return -1;
+}
+
+void Calendar::drop(QDropEvent *e)
+{
+    QDate date = getDateByPosition(e->pos());
+    if (!date.isValid() || date.month() != monthShown()) {
+        return;
+    }
+    const QMimeData* mime = e->mimeData();
+    if (!mime->hasUrls()) {
+        return;
+    }
+    QStringList pathList;
+    QList<QUrl> urlList = mime->urls();
+    for (auto url : urlList) {
+        pathList.append(url.toLocalFile());
+    }
+
+    for (auto path : pathList) {
+        int color = qrand() % Color::MAX_COLOR;
+        QFile file(path);
+        QFileInfo fileInfo(file.fileName());
+        QString title(fileInfo.fileName());
+        file.open(QIODevice::ReadOnly);
+        QByteArray bytes = file.readAll();
+        if (bytes.isEmpty()) {
+            QMessageBox::critical(this, tr("Error!"), tr("Cannot read file \"%1\"!").arg(file.fileName()), QMessageBox::Ok);
+            continue;
+        }
+        file.close();
+        QString itemSha1 = QString(QCryptographicHash::hash(
+                                       (title + QString::number(QDateTime::currentMSecsSinceEpoch())).toUtf8(),
+                                       QCryptographicHash::Sha1).toHex());
+        QString contentSha1 = QString(QCryptographicHash::hash(
+                                          bytes, QCryptographicHash::Sha1).toHex());
+        if (!importFile(path, contentSha1)) {
+            QMessageBox::critical(this, tr("Error!"), tr("Cannot import file \"%1\"!").arg(file.fileName()), QMessageBox::Ok);
+            continue;
+        }
+        m_dataAdapter->addFile(itemSha1, new CalendarFile(color, date, title, contentSha1));
+    }
+}
+
+bool Calendar::importFile(const QString &srcPath, const QString &sha1)
+{
+    QString filesPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + QDir::separator() + "files";
+    QDir filesDir = QDir(filesPath);
+    if (!filesDir.exists()) {
+        if (!filesDir.mkpath(filesPath)) {
+            return false;
+        }
+    }
+    QString dstPath = filesDir.filePath(sha1);
+    if (QFile::exists(dstPath)) {
+        return true;
+    }
+    return QFile::copy(srcPath, dstPath);
+}
+
+QDate Calendar::getDateByPosition(const QPoint &pos)
+{
+    int xIndex = -1, yIndex = -1;
+    for (int i = 0; i < xPivots.size(); ++i) {
+        if (xPivots[i] < pos.x() && pos.x() < xPivots[i] + cellWidths[i]) {
+            xIndex = i;
+            break;
+        }
+    }
+    for (int i = 0; i < yPivots.size(); ++i) {
+        if (yPivots[i] < pos.y() && pos.y() < yPivots[i] + cellHeights[i]) {
+            yIndex = i;
+            break;
+        }
+    }
+    if (xIndex == -1 || yIndex == -1) {
+        // invalid date
+        return QDate();
+    }
+    int index = 7 * yIndex + xIndex;
+    QDate baseDay(yearShown(), monthShown(), 1);
+    int baseIndex = (baseDay.dayOfWeek() == (int)firstDayOfWeek()) ?
+                baseDay.dayOfWeek() + 6 : baseDay.dayOfWeek() - 1;
+    return baseDay.addDays(index - baseIndex);
 }

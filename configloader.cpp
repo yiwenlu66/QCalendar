@@ -46,11 +46,13 @@ void ConfigLoader::readJson(const QByteArray &json)
         if (prefValue.isObject()) {
             m_pref = new PreferenceManager(prefValue.toObject());
         }
-        QJsonValue itemsValue = jsonObject.value(DataAdapter::KEY_ITEMS);
+        QJsonValue eventsValue = jsonObject.value(DataAdapter::KEY_EVENTS);
+        QJsonValue filesValue = jsonObject.value(DataAdapter::KEY_FILES);
         QJsonValue datesValue = jsonObject.value(DataAdapter::KEY_DATES);
-        if (itemsValue.isObject() && datesValue.isArray()) {
+        if (eventsValue.isObject() && filesValue.isObject() && datesValue.isArray()) {
             QJsonObject dataObject;
-            dataObject.insert(DataAdapter::KEY_ITEMS, itemsValue);
+            dataObject.insert(DataAdapter::KEY_EVENTS, eventsValue);
+            dataObject.insert(DataAdapter::KEY_FILES, filesValue);
             dataObject.insert(DataAdapter::KEY_DATES, datesValue);
             m_data = new DataAdapter(dataObject);
         }

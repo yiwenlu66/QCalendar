@@ -4,6 +4,8 @@
 #include <QCalendarWidget>
 #include <QPainter>
 #include <QLocale>
+#include <QDropEvent>
+#include <QPoint>
 #include "dataadapter.h"
 #include "eventdialog.h"
 
@@ -14,6 +16,7 @@ class Calendar : public QCalendarWidget
 public:
     Calendar(QWidget* parent = Q_NULLPTR);
     void setDataAdapter(DataAdapter* dataAdapter);
+    void drop(QDropEvent* e);
 
 public slots:
     void startOfWeekChanged(Qt::DayOfWeek);
@@ -47,6 +50,8 @@ private:
     bool doubleClickFreezed = false;
     mutable QList<int> xPivots, yPivots, cellWidths, cellHeights;    // record starting coordinates and metrics of all cells
 
+    static bool importFile(const QString& srcPath, const QString& sha1);
+
     /*
      * tell which tile in the cell the position belongs to; x and y are coordinates *within* the cell;
      * return -1 if the position belongs to a blank area.
@@ -54,6 +59,7 @@ private:
     int getTileIndex(int x, int y, int cellWidth, int cellHeight);
 
     void execEventDialog(EventDialog& dlg, QString sha1 = "");
+    QDate getDateByPosition(const QPoint& pos);
 
     DataAdapter* m_dataAdapter;
     QList<QStringList> m_monthEventList;

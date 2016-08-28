@@ -279,7 +279,7 @@ void Calendar::drop(QDropEvent *e)
     }
 
     for (auto path : pathList) {
-        int color = qrand() % Color::MAX_COLOR;
+        int color = qrand() % (Color::MAX_COLOR + 1);
         QFile file(path);
         QFileInfo fileInfo(file.fileName());
         QString title(fileInfo.fileName());
